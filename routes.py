@@ -4,6 +4,7 @@ from app import app, db
 from models import Transcription, Speaker, NoiseProfile
 from werkzeug.utils import secure_filename
 from transcription.deepgram_client import DeepgramTranscriptionClient
+from audio_processor.processor import AudioProcessor
 import asyncio
 
 # Initialize Deepgram client
@@ -32,8 +33,16 @@ async def transcribe():
         db.session.add(transcription)
         db.session.commit()
         
-        # Process the audio file
-        result = await transcription_client.transcribe_file(file_path)
+        # Process and enhance audio
+        processor = AudioProcessor(file_path)
+        enhanced_audio, sample_rate, noise_type = processor.process_audio()
+        
+        # Save enhanced audio
+        enhanced_path = os.path.join(app.config['UPLOAD_FOLDER'], f'enhanced_{filename}')
+        processor.save_enhanced_audio(enhanced_audio, sample_rate, enhanced_path)
+        
+        # Process the enhanced audio file
+        result = await transcription_client.transcribe_file(enhanced_path)
         
         # Update transcription record
         transcription.text = result['text']
@@ -51,22 +60,39 @@ async def transcribe():
             )
             db.session.add(speaker)
             
+        # Add noise profile
+        noise_profile = NoiseProfile(
+            transcription_id=transcription.id,
+            type=noise_type,
+            confidence=0.85,  # Default confidence for now
+            start_time=0.0,
+            end_time=float(len(enhanced_audio)) / sample_rate
+        )
+        db.session.add(noise_profile)
+            
         db.session.commit()
         
-        # Clean up the uploaded file
+        # Clean up files
         os.remove(file_path)
+        os.remove(enhanced_path)
         
         return jsonify({
             'id': transcription.id,
             'text': result['text'],
             'confidence': result['confidence'],
-            'speakers': result['speakers']
+            'speakers': result['speakers'],
+            'noise_profile': {
+                'type': noise_type,
+                'confidence': 0.85
+            }
         })
         
     except Exception as e:
         db.session.rollback()
         if os.path.exists(file_path):
             os.remove(file_path)
+        if os.path.exists(enhanced_path):
+            os.remove(enhanced_path)
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/transcriptions/<int:transcription_id>')
@@ -79,10 +105,19 @@ def get_transcription(transcription_id):
         'end_time': speaker.end_time
     } for speaker in transcription.speakers]
     
+    noise_profiles = NoiseProfile.query.filter_by(transcription_id=transcription_id).all()
+    noise_data = [{
+        'type': profile.type,
+        'confidence': profile.confidence,
+        'start_time': profile.start_time,
+        'end_time': profile.end_time
+    } for profile in noise_profiles]
+    
     return jsonify({
         'id': transcription.id,
         'text': transcription.text,
         'confidence': transcription.confidence_score,
         'status': transcription.status,
-        'speakers': speakers
+        'speakers': speakers,
+        'noise_profiles': noise_data
     })
