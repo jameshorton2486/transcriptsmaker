@@ -322,3 +322,21 @@
 2024-10-29 18:08:24,959 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:24] "GET /static/js/streaming.js HTTP/1.1" 200 -
 2024-10-29 18:08:24,960 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:24] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 18:08:25,047 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:25] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 18:08:37,585 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:37] "GET / HTTP/1.1" 200 -
+2024-10-29 18:08:37,654 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:37] "[36mGET /static/js/audio_processor.js HTTP/1.1[0m" 304 -
+2024-10-29 18:08:37,703 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:37] "[36mGET /static/js/streaming.js HTTP/1.1[0m" 304 -
+2024-10-29 18:11:48,241 - routes - [ERROR] - Error in transcribe: Invalid file format
+2024-10-29 18:11:48,243 - routes - [INFO] - Operation completed in 0.00 seconds
+2024-10-29 18:11:48,244 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:11:48] "[31m[1mPOST /api/transcribe HTTP/1.1[0m" 400 -
+2024-10-29 18:12:19,066 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:12:19] "GET / HTTP/1.1" 200 -
+2024-10-29 18:12:19,247 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:12:19] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 18:12:19,377 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:12:19] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 18:13:22,899 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:18:22 UTC)" (scheduled at 2024-10-29 18:13:22.899448+00:00)
+2024-10-29 18:13:22,902 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20552085530107264, "memory_mb": 132.171875, "open_files": 4, "threads": 25}
+2024-10-29 18:13:22,907 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:18:22 UTC)" executed successfully
+2024-10-29 18:13:24,702 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:18:24 UTC)" (scheduled at 2024-10-29 18:13:24.701454+00:00)
+2024-10-29 18:13:24,703 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20973015760405297, "memory_mb": 134.87890625, "open_files": 4, "threads": 26}
+2024-10-29 18:13:24,703 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:18:24 UTC)" executed successfully
+2024-10-29 18:14:53,877 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:14:53] "GET / HTTP/1.1" 200 -
+2024-10-29 18:14:53,892 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:14:53] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 18:14:53,989 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:14:53] "GET /static/js/streaming.js HTTP/1.1" 200 -

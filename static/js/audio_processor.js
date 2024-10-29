@@ -1,6 +1,7 @@
 class AudioProcessor {
     constructor() {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.allowedFormats = ['wav', 'mp3', 'flac', 'mp4'];
         this.initializeUploadForm();
     }
 
@@ -11,13 +12,38 @@ class AudioProcessor {
             return;
         }
 
+        const fileInput = document.getElementById('audioFile');
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && !this.validateFileFormat(file)) {
+                this.showError(
+                    'Incorrect file format. Please upload a WAV, MP3, FLAC, or MP4 file.',
+                    'FORMAT_ERROR'
+                );
+                e.target.value = ''; // Clear the file input
+            }
+        });
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const fileInput = document.getElementById('audioFile');
             const file = fileInput.files[0];
             
             if (!file) {
-                this.showError('Please select a file', 'VALIDATION_ERROR');
+                this.showError('Please select an audio file', 'VALIDATION_ERROR');
+                return;
+            }
+
+            if (!this.validateFileFormat(file)) {
+                this.showError(
+                    'Incorrect file format. Please upload a WAV, MP3, FLAC, or MP4 file.',
+                    'FORMAT_ERROR'
+                );
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024 * 1024) { // 2GB
+                this.showError('File size exceeds maximum limit of 2GB', 'SIZE_ERROR');
                 return;
             }
 
@@ -42,13 +68,32 @@ class AudioProcessor {
                 this.updateTranscriptionOutput(result);
             } catch (error) {
                 console.error('Error:', error);
-                this.showError(error.message || 'Error processing file', 'PROCESSING_ERROR');
+                let errorMessage = 'An unexpected error occurred while processing the file';
+                let errorType = 'PROCESSING_ERROR';
+
+                if (error.message.includes('413')) {
+                    errorMessage = 'File size exceeds server limit';
+                    errorType = 'SIZE_ERROR';
+                } else if (error.message.includes('format')) {
+                    errorMessage = 'Incorrect file format. Please upload a WAV, MP3, FLAC, or MP4 file.';
+                    errorType = 'FORMAT_ERROR';
+                } else if (error.message.includes('network')) {
+                    errorMessage = 'Network error occurred. Please check your internet connection.';
+                    errorType = 'NETWORK_ERROR';
+                }
+
+                this.showError(errorMessage, errorType);
             } finally {
                 const submitButton = form.querySelector('button[type="submit"]');
                 submitButton.disabled = false;
                 submitButton.textContent = 'Start Transcription';
             }
         });
+    }
+
+    validateFileFormat(file) {
+        const extension = file.name.split('.').pop().toLowerCase();
+        return this.allowedFormats.includes(extension);
     }
 
     showError(message, errorType = 'UNKNOWN_ERROR') {

@@ -9,6 +9,7 @@ class StreamHandler {
         this.reconnectDelay = 1000;
         this.pingInterval = null;
         this.errorDisplayTimeout = null;
+        this.errorTimeoutDuration = 5000;
         
         this.initializeButtons();
     }
@@ -18,7 +19,7 @@ class StreamHandler {
         const stopBtn = document.getElementById('stopStreaming');
         
         if (!startBtn || !stopBtn) {
-            this.showError('Streaming controls not found', 'INIT_ERROR');
+            this.handleError('Streaming controls not found', 'INIT_ERROR');
             return;
         }
         
@@ -27,11 +28,12 @@ class StreamHandler {
     }
 
     setupWebSocket() {
-        this.ws = new WebSocket('ws://' + window.location.host + '/stream');
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        this.ws = new WebSocket(`${wsProtocol}//${window.location.host}/stream`);
         
         this.ws.onopen = () => {
             console.log('WebSocket connection established');
-            this.showStatus('Connected', 'success');
+            this.showStatus('Connected to streaming server', 'success');
             this.setupPing();
         };
         
@@ -40,33 +42,50 @@ class StreamHandler {
             this.clearPing();
             
             if (this.isRecording && this.reconnectAttempts < this.maxReconnectAttempts) {
-                this.showStatus(`Reconnecting (${this.reconnectAttempts + 1}/${this.maxReconnectAttempts})...`, 'warning');
+                this.showStatus(
+                    `Connection lost. Attempting to reconnect (${this.reconnectAttempts + 1}/${this.maxReconnectAttempts})...`,
+                    'warning'
+                );
                 setTimeout(() => {
                     this.reconnectAttempts++;
                     this.setupWebSocket();
                 }, this.reconnectDelay * this.reconnectAttempts);
             } else if (this.reconnectAttempts >= this.maxReconnectAttempts) {
-                this.handleError('Connection lost after multiple attempts', 'CONNECTION_ERROR');
+                this.handleError(
+                    'Connection to streaming server lost after multiple attempts. Please try again later.',
+                    'CONNECTION_ERROR'
+                );
                 this.stopStreaming();
             }
         };
         
         this.ws.onerror = (error) => {
             console.error('WebSocket error:', error);
-            this.handleError('Connection error occurred', 'WEBSOCKET_ERROR');
+            this.handleError(
+                'Error connecting to streaming server. Please check your internet connection.',
+                'WEBSOCKET_ERROR'
+            );
         };
         
         this.ws.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
                 if (data.error) {
-                    this.handleError(data.error, data.error_code || 'STREAMING_ERROR');
+                    this.handleError(
+                        data.error,
+                        data.error_code || 'STREAMING_ERROR',
+                        data.details || null
+                    );
                 } else {
                     this.updateTranscriptionOutput(data);
                 }
             } catch (error) {
                 console.error('Error processing message:', error);
-                this.handleError('Error processing transcription', 'PARSE_ERROR');
+                this.handleError(
+                    'Error processing transcription data',
+                    'PARSE_ERROR',
+                    'Server returned invalid data format'
+                );
             }
         };
     }
@@ -91,8 +110,8 @@ class StreamHandler {
         }
     }
 
-    handleError(message, errorCode = 'UNKNOWN_ERROR') {
-        console.error(`${errorCode}:`, message);
+    handleError(message, errorCode = 'UNKNOWN_ERROR', details = null) {
+        console.error(`${errorCode}:`, message, details || '');
         
         // Clear any existing error timeout
         if (this.errorDisplayTimeout) {
@@ -101,9 +120,37 @@ class StreamHandler {
 
         const output = document.getElementById('transcriptionOutput');
         if (output) {
+            let errorMessage = message;
+            
+            // Enhance error messages based on error code
+            switch (errorCode) {
+                case 'MEDIA_ERROR':
+                    if (message.includes('NotAllowedError')) {
+                        errorMessage = 'Microphone access denied. Please allow microphone access in your browser settings and try again.';
+                    } else if (message.includes('NotFoundError')) {
+                        errorMessage = 'No microphone found. Please connect a microphone and try again.';
+                    } else if (message.includes('NotReadableError')) {
+                        errorMessage = 'Could not access microphone. Please make sure it\'s not being used by another application.';
+                    }
+                    break;
+                    
+                case 'WEBSOCKET_ERROR':
+                    errorMessage = 'Connection error. Please check your internet connection and try again.';
+                    break;
+                    
+                case 'RECORDER_ERROR':
+                    errorMessage = 'Error recording audio. Please check your microphone settings and try again.';
+                    break;
+                    
+                case 'CONNECTION_ERROR':
+                    errorMessage = 'Lost connection to streaming server. Please check your internet connection and try again.';
+                    break;
+            }
+            
             const errorHtml = `
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <strong>${errorCode}:</strong> ${message}
+                    <strong>${errorCode}:</strong> ${errorMessage}
+                    ${details ? `<br><small class="text-muted">${details}</small>` : ''}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `;
@@ -114,14 +161,14 @@ class StreamHandler {
             // Add new error message
             output.insertAdjacentHTML('afterbegin', errorHtml);
             
-            // Auto-dismiss error after 5 seconds
+            // Auto-dismiss error after timeout
             this.errorDisplayTimeout = setTimeout(() => {
                 const alert = output.querySelector('.alert-danger');
                 if (alert) {
                     alert.classList.remove('show');
                     setTimeout(() => alert.remove(), 150);
                 }
-            }, 5000);
+            }, this.errorTimeoutDuration);
         }
         
         if (this.isRecording) {
@@ -155,7 +202,11 @@ class StreamHandler {
             
             this.mediaRecorder.onerror = (error) => {
                 console.error('MediaRecorder error:', error);
-                this.handleError('Error recording audio', 'RECORDER_ERROR');
+                this.handleError(
+                    'Error recording audio',
+                    'RECORDER_ERROR',
+                    error.name === 'InvalidStateError' ? 'Recording session invalid' : error.message
+                );
             };
             
             this.mediaRecorder.start(1000);
@@ -165,14 +216,15 @@ class StreamHandler {
             document.getElementById('startStreaming').disabled = true;
             document.getElementById('stopStreaming').disabled = false;
             
-            this.showStatus('Recording started', 'info');
+            this.showStatus('Recording started - Speak clearly into your microphone', 'info');
         } catch (error) {
             console.error('Error:', error);
             this.handleError(
+                error.message,
+                'MEDIA_ERROR',
                 error.name === 'NotAllowedError' 
-                    ? 'Microphone access denied. Please allow microphone access and try again.' 
-                    : `Error accessing microphone: ${error.message}`,
-                'MEDIA_ERROR'
+                    ? 'Please allow microphone access in your browser settings'
+                    : error.name
             );
         }
     }
