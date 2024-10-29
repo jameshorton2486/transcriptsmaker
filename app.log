@@ -897,3 +897,239 @@
 2024-10-29 22:05:45,772 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 22:05:45] "GET / HTTP/1.1" 200 -
 2024-10-29 22:05:45,800 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 22:05:45] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 22:05:45,809 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 22:05:45] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 22:10:00,000 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.<lambda> (trigger: cron[minute='*/5'], next run at: 2024-10-29 22:15:00 UTC)" (scheduled at 2024-10-29 22:10:00+00:00)
+2024-10-29 22:10:01,008 - performance - [INFO] - Resource usage: {"cpu": {"system": 18.5, "process": 0.0, "cores": 16}, "memory": {"total": 62.80340576171875, "available": 11.68996810913086, "process": 133.55078125, "percent": 0.2076649876429948}, "disk": {"total": 49.12754821777344, "free": 36.503639221191406, "percent": 22.4}, "process": {"open_files": 3, "threads": 25, "connections": 2}}
+2024-10-29 22:10:01,008 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.<lambda> (trigger: cron[minute='*/5'], next run at: 2024-10-29 22:15:00 UTC)" executed successfully
+2024-10-29 22:15:00,000 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.<lambda> (trigger: cron[minute='*/5'], next run at: 2024-10-29 22:20:00 UTC)" (scheduled at 2024-10-29 22:15:00+00:00)
+2024-10-29 22:15:01,008 - performance - [INFO] - Resource usage: {"cpu": {"system": 36.2, "process": 0.0, "cores": 16}, "memory": {"total": 62.80340576171875, "available": 9.687820434570312, "process": 133.55078125, "percent": 0.2076649876429948}, "disk": {"total": 49.12754821777344, "free": 36.501853942871094, "percent": 22.4}, "process": {"open_files": 3, "threads": 25, "connections": 2}}
+2024-10-29 22:15:01,009 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.<lambda> (trigger: cron[minute='*/5'], next run at: 2024-10-29 22:20:00 UTC)" executed successfully
+2024-10-29 22:15:47,529 - root - [INFO] - [app:87] - Upload folder created at /tmp/uploads
+2024-10-29 22:15:49,960 - routes - [INFO] - [app:186] - Database tables created successfully
+2024-10-29 22:15:49,961 - error_handling.handlers - [INFO] - [handlers:61] - Completed Database initialization in 1.11 seconds
+2024-10-29 22:15:50,107 - transcription.deepgram_client - [INFO] - [deepgram_client:35] - Deepgram API key validation successful
+2024-10-29 22:15:50,107 - routes - [INFO] - [app:176] - Deepgram API key validation successful
+2024-10-29 22:15:50,109 - apscheduler.scheduler - [INFO] - [base:454] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 22:15:50,109 - apscheduler.scheduler - [INFO] - [base:454] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 22:15:50,110 - apscheduler.scheduler - [INFO] - [base:895] - Added job "start_monitoring.<locals>.<lambda>" to job store "default"
+2024-10-29 22:15:50,110 - apscheduler.scheduler - [INFO] - [base:895] - Added job "start_monitoring.<locals>.daily_report" to job store "default"
+2024-10-29 22:15:50,110 - apscheduler.scheduler - [INFO] - [base:181] - Scheduler started
+2024-10-29 22:15:50,111 - root - [INFO] - ============================================================
+2024-10-29 22:15:50,111 - root - [INFO] - Legal Transcription System v1.0.0
+2024-10-29 22:15:50,111 - root - [INFO] - ============================================================
+2024-10-29 22:15:50,112 - root - [INFO] - Configuration:
+2024-10-29 22:15:50,112 - root - [INFO] -   ENVIRONMENT: production
+2024-10-29 22:15:50,112 - root - [INFO] -   DEBUG_MODE: False
+2024-10-29 22:15:50,112 - root - [INFO] -   UPLOAD_FOLDER: /tmp/uploads
+2024-10-29 22:15:50,112 - root - [INFO] -   MAX_CONTENT_LENGTH: 2.0GB
+2024-10-29 22:15:50,112 - root - [INFO] -   ALLOWED_EXTENSIONS: ['mp3', 'flac', 'mp4', 'wav']
+2024-10-29 22:15:50,112 - root - [INFO] -   PROCESSING_TIMEOUT: 300s
+2024-10-29 22:15:50,113 - root - [INFO] -   SERVER_PORT: 8080
+2024-10-29 22:15:50,113 - root - [WARNING] - This is a development server. Do not use it in a production deployment.
+2024-10-29 22:15:50,113 - root - [WARNING] - Use a production WSGI server instead.
+2024-10-29 22:15:50,113 - root - [INFO] - Starting Legal Transcription System...
+2024-10-29 22:15:50,125 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.5:8080
+2024-10-29 22:15:50,125 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:17:01,933 - root - [INFO] - [app:17] - Initializing Flask application...
+2024-10-29 22:17:02,206 - root - [INFO] - [app:57] - Upload folder created at /tmp/uploads
+2024-10-29 22:17:02,207 - root - [INFO] - [app:104] - Flask application initialized successfully
+2024-10-29 22:17:42,206 - root - [INFO] - [app:17] - Initializing Flask application...
+2024-10-29 22:17:42,284 - root - [INFO] - [app:57] - Upload folder created at /tmp/uploads
+2024-10-29 22:17:42,284 - root - [INFO] - [app:100] - Flask application initialized successfully
+2024-10-29 22:17:43,579 - routes - [INFO] - [main:22] - ============================================================
+2024-10-29 22:17:43,579 - routes - [INFO] - [main:23] - Legal Transcription System v1.0.0
+2024-10-29 22:17:43,579 - routes - [INFO] - [main:24] - ============================================================
+2024-10-29 22:17:43,579 - routes - [INFO] - [main:36] -   ENVIRONMENT: production
+2024-10-29 22:17:43,579 - routes - [INFO] - [main:36] -   DEBUG_MODE: False
+2024-10-29 22:17:43,579 - routes - [INFO] - [main:36] -   SERVER_PORT: 8080
+2024-10-29 22:17:43,579 - routes - [INFO] - [main:39] - Starting Legal Transcription System...
+2024-10-29 22:17:43,596 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.5:8080
+2024-10-29 22:17:43,596 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:17:43,924 - app - [ERROR] - [app:838] - Exception on / [GET]
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/routes.py", line 75, in index
+    return render_template('transcribe.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/runner/workspace/templates/transcribe.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/home/runner/workspace/templates/base.html", line 131, in top-level template code
+    {{ super() }}
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'super' is undefined
+2024-10-29 22:17:43,937 - routes - [ERROR] - [app:95] - Internal server error: 500 Internal Server Error: The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+2024-10-29 22:17:43,939 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:17:43] "[35m[1mGET / HTTP/1.1[0m" 500 -
+2024-10-29 22:17:43,967 - werkzeug - [ERROR] - [_internal:97] - Error on request:
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/routes.py", line 75, in index
+    return render_template('transcribe.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/runner/workspace/templates/transcribe.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/home/runner/workspace/templates/base.html", line 131, in top-level template code
+    {{ super() }}
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'super' is undefined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/werkzeug/serving.py", line 370, in run_wsgi
+    execute(self.server.app)
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/werkzeug/serving.py", line 331, in execute
+    application_iter = app(environ, start_response)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1498, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1476, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask_cors/extension.py", line 194, in wrapped_function
+    return cors_after_request(app.make_response(f(*args, **kwargs)))
+                                                ^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 823, in handle_exception
+    server_error = self.ensure_sync(handler)(server_error)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/app.py", line 98, in internal_error
+    return render_template('500.html'), 500
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 1304, in render
+    self.environment.handle_exception()
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 939, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "/home/runner/workspace/templates/500.html", line 1, in top-level template code
+    {% extends "base.html" %}
+  File "/home/runner/workspace/templates/base.html", line 131, in top-level template code
+    {{ super() }}
+  File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/jinja2/utils.py", line 83, in from_obj
+    if hasattr(obj, "jinja_pass_arg"):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+jinja2.exceptions.UndefinedError: 'super' is undefined
+2024-10-29 22:19:17,488 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:19:18,417 - routes - [INFO] - [main:27] - ============================================================
+2024-10-29 22:19:18,419 - routes - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:19:18,420 - routes - [INFO] - [main:29] - ============================================================
+2024-10-29 22:19:18,420 - routes - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:19:18,420 - routes - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:19:18,420 - routes - [INFO] - [main:43] -   SERVER_PORT: 8080
+2024-10-29 22:19:18,420 - routes - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:19:18,425 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.5:8080
+2024-10-29 22:19:18,425 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:19:18,611 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:19:18] "GET / HTTP/1.1" 200 -
+2024-10-29 22:19:43,729 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:19:43,731 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:19:43,731 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:19:43,731 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:19:43,732 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:19:43,732 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:19:43,732 - root - [INFO] - [main:43] -   SERVER_PORT: 8080
+2024-10-29 22:19:43,732 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:19:43,738 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.5:8080
+2024-10-29 22:19:43,738 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:19:44,413 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:19:44,415 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:19:44,415 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:19:44,415 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:19:44,415 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:19:44,416 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:19:44,416 - root - [INFO] - [main:43] -   SERVER_PORT: 8080
+2024-10-29 22:19:44,416 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:19:44,423 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.5:8080
+2024-10-29 22:19:44,423 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:19:44,606 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:19:44,613 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:19:44] "GET / HTTP/1.1" 200 -
+2024-10-29 22:20:16,595 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:20:16,597 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:20:16,597 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:20:16,597 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:20:16,597 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:20:16,597 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:20:16,597 - root - [INFO] - [main:43] -   SERVER_PORT: 5000
+2024-10-29 22:20:16,598 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:20:16,604 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.5:5000
+2024-10-29 22:20:16,604 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:20:26,391 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:20:26,398 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:26] "GET / HTTP/1.1" 200 -
+2024-10-29 22:20:26,486 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:26] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 22:20:26,494 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:26] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 22:20:37,181 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:20:37,182 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:37] "GET / HTTP/1.1" 200 -
+2024-10-29 22:20:37,266 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:37] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 22:20:37,275 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:37] "GET /static/js/streaming.js HTTP/1.1" 200 -

@@ -2,10 +2,15 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Legal Transcription System</title>
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
     
     <!-- Error Boundary Script - Load first -->
     <script>
@@ -16,33 +21,42 @@
             maxErrors: 10,
 
             init() {
-                if (this.initialized) return;
+                if (this.initialized) {
+                    console.debug('Error boundary already initialized');
+                    return;
+                }
+                console.debug('Initializing error boundary handlers...');
                 this.setupErrorHandlers();
                 this.initialized = true;
-                console.debug('Global error boundary initialized');
+                console.debug('Global error boundary initialized successfully');
             },
 
             setupErrorHandlers() {
                 window.onerror = (msg, url, lineNo, columnNo, error) => {
+                    console.debug('Global error handler caught an error');
                     this.logError('runtime', {
                         message: msg,
                         url: url,
                         lineNo: lineNo,
                         columnNo: columnNo,
-                        error: error
+                        error: error,
+                        stack: error?.stack
                     });
                     return false;
                 };
 
                 window.addEventListener('unhandledrejection', (event) => {
+                    console.debug('Unhandled promise rejection caught');
                     this.logError('promise', {
                         message: event.reason.message || event.reason,
-                        stack: event.reason.stack
+                        stack: event.reason.stack,
+                        type: event.reason.name || 'UnhandledRejection'
                     });
                 });
 
                 window.addEventListener('error', (event) => {
                     if (event.target.tagName === 'SCRIPT') {
+                        console.debug('Script loading error caught');
                         this.logError('script', {
                             message: 'Script loading error',
                             src: event.target.src,
@@ -50,13 +64,29 @@
                         });
                     }
                 }, true);
+
+                // Add resource loading error handler
+                window.addEventListener('error', (event) => {
+                    if (['link', 'img', 'script'].includes(event.target.tagName?.toLowerCase())) {
+                        console.debug('Resource loading error caught');
+                        this.logError('resource', {
+                            message: `Failed to load ${event.target.tagName.toLowerCase()}`,
+                            src: event.target.src || event.target.href,
+                            type: event.target.tagName.toLowerCase()
+                        });
+                    }
+                }, true);
+
+                console.debug('Error handlers setup completed');
             },
 
             logError(type, details) {
                 const error = {
                     type: type,
                     timestamp: new Date().toISOString(),
-                    details: details
+                    details: details,
+                    url: window.location.href,
+                    userAgent: navigator.userAgent
                 };
                 
                 console.error(`[${error.type}] Error:`, error.details);
@@ -67,6 +97,19 @@
                 }
                 
                 this.showErrorUI(error);
+
+                // Send error to server
+                try {
+                    fetch('/api/log-error', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(error)
+                    }).catch(console.error);
+                } catch (e) {
+                    console.error('Failed to send error to server:', e);
+                }
             },
 
             showErrorUI(error) {
@@ -84,6 +127,11 @@
                     ${error.details.stack ? `<pre class="mt-2 small">${error.details.stack}</pre>` : ''}
                 `;
                 container.appendChild(alert);
+
+                // Auto-remove old alerts
+                if (container.children.length > this.maxErrors) {
+                    container.removeChild(container.children[0]);
+                }
             },
 
             createErrorContainer() {
@@ -91,25 +139,26 @@
                 container.id = 'errorContainer';
                 container.className = 'position-fixed top-0 end-0 p-3';
                 container.style.zIndex = '1050';
+                container.style.maxWidth = '500px';
                 document.body.appendChild(container);
                 return container;
             }
         };
 
         // Initialize error boundary
-        document.addEventListener('DOMContentLoaded', () => AppErrors.init());
+        console.debug('Setting up error boundary initialization...');
+        document.addEventListener('DOMContentLoaded', () => {
+            console.debug('DOM loaded, initializing error boundary...');
+            AppErrors.init();
+        });
     </script>
 
-    <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
-    
     <!-- Core Scripts - Load with defer -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer crossorigin="anonymous"></script>
     {% block head_scripts %}{% endblock %}
 </head>
 <body class="bg-dark text-light">
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
         <div class="container">
             <a class="navbar-brand" href="/">Legal Transcription</a>
@@ -130,7 +179,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-4" id="mainContent">
+    <div class="container mt-4">
         {% block content %}{% endblock %}
     </div>
 
@@ -150,43 +199,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Component Error Boundary -->
-    <script defer>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.debug('Initializing component observers...');
-            
-            // Monitor DOM mutations for dynamic content
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    if (mutation.type === 'childList') {
-                        mutation.addedNodes.forEach(function(node) {
-                            if (node.nodeType === 1) { // Element node
-                                // Monitor for error messages
-                                const errorElements = node.querySelectorAll('.alert-danger, .text-danger');
-                                errorElements.forEach(element => {
-                                    console.error('Component error:', {
-                                        message: element.textContent,
-                                        component: element.closest('[data-component]')?.dataset.component || 'unknown',
-                                        timestamp: new Date().toISOString()
-                                    });
-                                });
-                            }
-                        });
-                    }
-                });
-            });
-
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['class']
-            });
-            
-            console.debug('Component observers initialized');
-        });
-    </script>
 
     <!-- Additional Scripts -->
     {% block scripts %}{% endblock %}
