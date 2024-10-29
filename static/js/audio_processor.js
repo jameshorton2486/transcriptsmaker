@@ -98,17 +98,20 @@ class AudioProcessor {
     }
 
     showError(message, errorType = 'UNKNOWN_ERROR') {
+        console.error(`${errorType}:`, message);
+        
         // Update modal content
         const modalTitle = document.getElementById('errorModalLabel');
         const modalBody = document.getElementById('errorModalBody');
         
         modalTitle.textContent = this.getErrorTypeTitle(errorType);
+        
         modalBody.innerHTML = `
             <div class="d-flex align-items-center mb-3">
-                <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
-                <strong class="text-danger">${errorType}</strong>
+                <i class="bi bi-exclamation-triangle-fill text-light fs-4 me-2"></i>
+                <strong class="text-light">${errorType}</strong>
             </div>
-            <p class="mb-0">${message}</p>
+            <p class="mb-0 text-light fw-medium">${message}</p>
         `;
 
         // Show the modal
@@ -119,7 +122,10 @@ class AudioProcessor {
         if (output) {
             output.innerHTML = `
                 <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                    <strong>${errorType}:</strong> An error occurred. See error details in the modal.
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>${errorType}:</strong> An error occurred. See error details in the modal.
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `;
