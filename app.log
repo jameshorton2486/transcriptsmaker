@@ -511,3 +511,33 @@
 2024-10-29 19:15:51,073 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 19:15:51] "GET / HTTP/1.1" 200 -
 2024-10-29 19:15:51,087 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 19:15:51] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 19:15:51,094 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 19:15:51] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 19:17:37,832 - apscheduler.scheduler - [INFO] - Scheduler has been shut down
+2024-10-29 19:22:50,028 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 19:22:58,550 - routes - [INFO] - Database tables created successfully
+2024-10-29 19:22:58,550 - error_handling.handlers - [INFO] - Completed Database initialization in 0.99 seconds
+2024-10-29 19:22:58,837 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 19:22:58,838 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 19:22:59,190 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 19:22:59,191 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 19:22:59,191 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 19:22:59,191 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 19:22:59,222 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.5:5000
+2024-10-29 19:22:59,222 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 19:22:59,224 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 19:22:59,960 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 19:23:01,047 - routes - [INFO] - Database tables created successfully
+2024-10-29 19:23:01,047 - error_handling.handlers - [INFO] - Completed Database initialization in 0.53 seconds
+2024-10-29 19:23:01,314 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 19:23:01,314 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 19:23:01,365 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 19:23:01,365 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 19:23:01,365 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 19:23:01,366 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 19:23:01,375 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 19:23:01,377 - werkzeug - [INFO] -  * Debugger PIN: 646-139-791
+2024-10-29 19:23:01,452 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 19:23:01] "GET / HTTP/1.1" 200 -
+2024-10-29 19:23:01,502 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 19:23:01] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 19:23:01,582 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 19:23:01] "GET /static/js/streaming.js HTTP/1.1" 200 -

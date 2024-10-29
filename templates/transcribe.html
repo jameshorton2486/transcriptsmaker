@@ -6,6 +6,7 @@
         position: fixed;
         top: 0;
         padding-top: 20px;
+        z-index: 1050;
     }
     .custom-modal .modal-dialog {
         width: 576px;
@@ -84,7 +85,7 @@
 </div>
 
 <!-- Error Modal -->
-<div class="modal fade custom-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+<div class="modal fade custom-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header border-0">
