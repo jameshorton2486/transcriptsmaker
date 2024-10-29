@@ -109,3 +109,66 @@
 2024-10-29 17:51:54,578 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:51:54] "[32mGET /api/docs HTTP/1.1[0m" 308 -
 2024-10-29 17:51:55,894 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:51:55] "[32mGET /api/docs HTTP/1.1[0m" 308 -
 2024-10-29 17:52:00,801 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:52:00] "[32mGET /api/docs HTTP/1.1[0m" 308 -
+2024-10-29 17:56:46,820 - werkzeug - INFO -  * Detected change in '/home/runner/workspace/app.py', reloading
+2024-10-29 17:56:47,127 - werkzeug - INFO -  * Restarting with stat
+2024-10-29 17:56:47,885 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 17:56:49,695 - routes - [INFO] - Database tables created successfully
+2024-10-29 17:56:52,337 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 17:56:53,539 - routes - [INFO] - Database tables created successfully
+2024-10-29 17:56:53,616 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 17:56:53,617 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 17:56:53,617 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 17:56:53,617 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 17:56:53,651 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 17:56:53,651 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 17:56:53,653 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 17:56:54,066 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 17:56:55,370 - routes - [INFO] - Database tables created successfully
+2024-10-29 17:56:55,400 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 17:56:55,400 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 17:56:55,400 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 17:56:55,401 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 17:56:55,411 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 17:56:55,414 - werkzeug - [INFO] -  * Debugger PIN: 133-067-065
+2024-10-29 17:57:02,320 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 17:57:03,452 - routes - [INFO] - Database tables created successfully
+2024-10-29 17:57:03,482 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 17:57:03,482 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 17:57:03,482 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 17:57:03,483 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 17:57:03,494 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 17:57:03,494 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 17:57:03,495 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 17:57:03,899 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 17:57:04,500 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 17:57:05,629 - routes - [INFO] - Database tables created successfully
+2024-10-29 17:57:05,658 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 17:57:05,659 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 17:57:05,659 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 17:57:05,660 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 17:57:05,670 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 17:57:05,671 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 17:57:05,672 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 17:57:06,213 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 17:57:07,358 - routes - [INFO] - Database tables created successfully
+2024-10-29 17:57:07,387 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 17:57:07,387 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 17:57:07,388 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 17:57:07,389 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 17:57:07,397 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 17:57:07,399 - werkzeug - [INFO] -  * Debugger PIN: 105-274-104
+2024-10-29 17:57:07,447 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:57:07] "GET / HTTP/1.1" 200 -
+2024-10-29 17:57:07,465 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:57:07] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 17:57:07,478 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:57:07] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 17:57:19,213 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:57:19] "GET / HTTP/1.1" 200 -
+2024-10-29 17:57:19,228 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:57:19] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 17:57:19,243 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:57:19] "GET /static/js/streaming.js HTTP/1.1" 200 -

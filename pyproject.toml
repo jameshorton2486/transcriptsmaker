@@ -26,4 +26,5 @@ dependencies = [
     "flask-swagger-ui>=4.11.1",
     "apispec>=6.7.0",
     "marshmallow>=3.23.0",
+    "apscheduler",
 ]

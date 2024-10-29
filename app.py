@@ -3,17 +3,10 @@ import logging
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from database import db
+from monitoring import setup_logging, start_monitoring, handle_error, log_request_metrics
 
-# Set up logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(),
-        logging.FileHandler('app.log')
-    ]
-)
-logger = logging.getLogger(__name__)
+# Set up enhanced logging
+logger, perf_logger = setup_logging()
 
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
@@ -52,6 +45,7 @@ logger.info(f"Upload folder created at {app.config['UPLOAD_FOLDER']}")
 
 # Serve static files with proper MIME types
 @app.route('/static/<path:filename>')
+@log_request_metrics()
 def serve_static(filename):
     mimetype = None
     for ext, mime in app.config['MIME_TYPES'].items():
@@ -68,6 +62,7 @@ from api import api_bp, swagger_ui_blueprint, SWAGGER_URL
 app.register_blueprint(api_bp)
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
+# Initialize database
 with app.app_context():
     try:
         db.create_all()
@@ -79,16 +74,27 @@ with app.app_context():
 # Error handlers
 @app.errorhandler(413)
 def request_entity_too_large(error):
-    return jsonify({
+    return handle_error({
         'error': 'File too large',
         'max_size': f"{app.config['MAX_CONTENT_LENGTH']/1024/1024:.0f}MB"
-    }), 413, {'Content-Type': 'application/json'}
+    })
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return render_template('404.html'), 404, {'Content-Type': 'text/html'}
+    return handle_error(error)
 
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
-    return render_template('500.html'), 500, {'Content-Type': 'text/html'}
+    return handle_error(error)
+
+@app.errorhandler(Exception)
+def unhandled_exception(error):
+    return handle_error(error)
+
+# Start monitoring
+scheduler = start_monitoring(app)
+
+# Cleanup on shutdown
+import atexit
+atexit.register(lambda: scheduler.shutdown())
