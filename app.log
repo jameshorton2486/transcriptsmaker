@@ -73,3 +73,39 @@
 2024-10-29 17:48:26,622 - __main__ - INFO - Starting Legal Transcription System
 2024-10-29 17:48:26,630 - werkzeug - WARNING -  * Debugger is active!
 2024-10-29 17:48:26,632 - werkzeug - INFO -  * Debugger PIN: 234-829-656
+2024-10-29 17:48:45,380 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:48:46,528 - routes - INFO - Database tables created successfully
+2024-10-29 17:48:46,528 - __main__ - INFO - Starting Legal Transcription System
+2024-10-29 17:48:46,544 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 17:48:46,544 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-10-29 17:48:46,545 - werkzeug - INFO -  * Restarting with stat
+2024-10-29 17:48:46,943 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:48:48,117 - routes - INFO - Database tables created successfully
+2024-10-29 17:48:48,117 - __main__ - INFO - Starting Legal Transcription System
+2024-10-29 17:48:48,125 - werkzeug - WARNING -  * Debugger is active!
+2024-10-29 17:48:48,126 - werkzeug - INFO -  * Debugger PIN: 917-939-831
+2024-10-29 17:49:43,934 - werkzeug - INFO -  * Detected change in '/home/runner/workspace/app.py', reloading
+2024-10-29 17:49:44,161 - werkzeug - INFO -  * Restarting with stat
+2024-10-29 17:49:44,584 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:49:48,659 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:50:43,429 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:51:45,316 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:51:46,393 - routes - INFO - Database tables created successfully
+2024-10-29 17:51:46,393 - __main__ - INFO - Starting Legal Transcription System
+2024-10-29 17:51:46,408 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 17:51:46,408 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-10-29 17:51:46,409 - werkzeug - INFO -  * Restarting with stat
+2024-10-29 17:51:46,799 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:51:47,903 - routes - INFO - Database tables created successfully
+2024-10-29 17:51:47,903 - __main__ - INFO - Starting Legal Transcription System
+2024-10-29 17:51:47,911 - werkzeug - WARNING -  * Debugger is active!
+2024-10-29 17:51:47,913 - werkzeug - INFO -  * Debugger PIN: 964-699-054
+2024-10-29 17:51:54,578 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:51:54] "[32mGET /api/docs HTTP/1.1[0m" 308 -
+2024-10-29 17:51:55,894 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:51:55] "[32mGET /api/docs HTTP/1.1[0m" 308 -
+2024-10-29 17:52:00,801 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:52:00] "[32mGET /api/docs HTTP/1.1[0m" 308 -

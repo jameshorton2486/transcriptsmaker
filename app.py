@@ -1,9 +1,8 @@
 import os
 import logging
 from flask import Flask, render_template, request, jsonify, send_from_directory
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
 from werkzeug.utils import secure_filename
+from database import db
 
 # Set up logging
 logging.basicConfig(
@@ -16,10 +15,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-class Base(DeclarativeBase):
-    pass
-
-db = SQLAlchemy(model_class=Base)
 app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 # Configuration
@@ -65,8 +60,13 @@ def serve_static(filename):
             break
     return send_from_directory(app.static_folder, filename, mimetype=mimetype)
 
-# Import routes after app initialization
+# Import routes and blueprints after app initialization
 from routes import *
+from api import api_bp, swagger_ui_blueprint, SWAGGER_URL
+
+# Register blueprints
+app.register_blueprint(api_bp)
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 with app.app_context():
     try:
