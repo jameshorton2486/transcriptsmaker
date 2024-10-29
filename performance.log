@@ -122,3 +122,7 @@
 2024-10-29 21:21:59,827 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.2055512254475588, "memory_mb": 132.19140625, "open_files": 4, "threads": 25}
 2024-10-29 21:22:01,820 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20873401679930725, "memory_mb": 134.23828125, "open_files": 4, "threads": 26}
 2024-10-29 21:22:01,820 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20873401679930725, "memory_mb": 134.23828125, "open_files": 4, "threads": 26}
+2024-10-29 21:33:43,706 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20584885288312305, "memory_mb": 132.3828125, "open_files": 4, "threads": 25}
+2024-10-29 21:33:43,706 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20584885288312305, "memory_mb": 132.3828125, "open_files": 4, "threads": 25}
+2024-10-29 21:33:45,794 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.2078836526976951, "memory_mb": 133.69140625, "open_files": 4, "threads": 26}
+2024-10-29 21:33:45,794 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.2078836526976951, "memory_mb": 133.69140625, "open_files": 4, "threads": 26}

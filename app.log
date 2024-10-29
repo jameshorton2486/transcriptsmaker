@@ -799,3 +799,42 @@
 2024-10-29 21:28:45,917 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:28:45] "GET / HTTP/1.1" 200 -
 2024-10-29 21:28:45,957 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:28:45] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 21:28:46,052 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:28:46] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 21:33:43,704 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:38:43 UTC)" (scheduled at 2024-10-29 21:33:43.703413+00:00)
+2024-10-29 21:33:43,706 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20584885288312305, "memory_mb": 132.3828125, "open_files": 4, "threads": 25}
+2024-10-29 21:33:43,706 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:38:43 UTC)" executed successfully
+2024-10-29 21:33:45,793 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:38:45 UTC)" (scheduled at 2024-10-29 21:33:45.792633+00:00)
+2024-10-29 21:33:45,794 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.2078836526976951, "memory_mb": 133.69140625, "open_files": 4, "threads": 26}
+2024-10-29 21:33:45,795 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:38:45 UTC)" executed successfully
+2024-10-29 21:38:39,754 - werkzeug - [INFO] -  * Detected change in '/home/runner/workspace/main.py', reloading
+2024-10-29 21:38:39,756 - apscheduler.scheduler - [INFO] - Scheduler has been shut down
+2024-10-29 21:38:40,024 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 21:38:40,748 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 21:38:41,738 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 21:38:44,181 - routes - [INFO] - Database tables created successfully
+2024-10-29 21:38:44,181 - error_handling.handlers - [INFO] - Completed Database initialization in 1.05 seconds
+2024-10-29 21:38:44,340 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 21:38:44,344 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 21:38:44,450 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 21:38:44,450 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 21:38:44,450 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 21:38:44,454 - root - [INFO] - ============================================================
+2024-10-29 21:38:44,454 - root - [INFO] - Legal Transcription System v1.0.0
+2024-10-29 21:38:44,454 - root - [INFO] - ============================================================
+2024-10-29 21:38:44,454 - root - [INFO] - Configuration:
+2024-10-29 21:38:44,454 - root - [INFO] -   ENVIRONMENT: production
+2024-10-29 21:38:44,455 - root - [INFO] -   DEBUG_MODE: False
+2024-10-29 21:38:44,455 - root - [INFO] -   UPLOAD_FOLDER: /tmp/uploads
+2024-10-29 21:38:44,455 - root - [INFO] -   MAX_CONTENT_LENGTH: 2.0GB
+2024-10-29 21:38:44,455 - root - [INFO] -   ALLOWED_EXTENSIONS: ['flac', 'mp4', 'mp3', 'wav']
+2024-10-29 21:38:44,455 - root - [INFO] -   PROCESSING_TIMEOUT: 300s
+2024-10-29 21:38:44,455 - root - [WARNING] - This is a development server. Do not use it in a production deployment.
+2024-10-29 21:38:44,455 - root - [WARNING] - Use a production WSGI server instead.
+2024-10-29 21:38:44,455 - root - [INFO] - Starting Legal Transcription System...
+2024-10-29 21:38:44,478 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.5:5000
+2024-10-29 21:38:44,478 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 21:38:55,492 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:38:55] "GET / HTTP/1.1" 200 -
+2024-10-29 21:38:55,541 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:38:55] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 21:38:55,556 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:38:55] "GET /static/js/streaming.js HTTP/1.1" 200 -
