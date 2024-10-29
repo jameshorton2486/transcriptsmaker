@@ -756,3 +756,46 @@
 2024-10-29 21:23:57,342 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:23:57] "GET / HTTP/1.1" 200 -
 2024-10-29 21:23:57,363 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:23:57] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 21:23:57,474 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:23:57] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 21:27:09,329 - werkzeug - [INFO] -  * Detected change in '/home/runner/workspace/app.py', reloading
+2024-10-29 21:27:09,330 - apscheduler.scheduler - [INFO] - Scheduler has been shut down
+2024-10-29 21:27:09,590 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 21:27:10,495 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 21:27:11,722 - routes - [INFO] - Database tables created successfully
+2024-10-29 21:27:11,722 - error_handling.handlers - [INFO] - Completed Database initialization in 0.47 seconds
+2024-10-29 21:27:11,867 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 21:27:11,867 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 21:27:11,906 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 21:27:11,906 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 21:27:11,907 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 21:27:11,907 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 21:27:11,914 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 21:27:11,915 - werkzeug - [INFO] -  * Debugger PIN: 672-429-385
+2024-10-29 21:28:42,434 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 21:28:43,510 - routes - [INFO] - Database tables created successfully
+2024-10-29 21:28:43,511 - error_handling.handlers - [INFO] - Completed Database initialization in 0.49 seconds
+2024-10-29 21:28:43,652 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 21:28:43,653 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 21:28:43,703 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 21:28:43,703 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 21:28:43,703 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 21:28:43,704 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 21:28:43,718 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.5:5000
+2024-10-29 21:28:43,718 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 21:28:43,719 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 21:28:44,449 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 21:28:45,602 - routes - [INFO] - Database tables created successfully
+2024-10-29 21:28:45,603 - error_handling.handlers - [INFO] - Completed Database initialization in 0.46 seconds
+2024-10-29 21:28:45,737 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 21:28:45,737 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 21:28:45,792 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 21:28:45,795 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 21:28:45,795 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 21:28:45,795 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 21:28:45,804 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 21:28:45,806 - werkzeug - [INFO] -  * Debugger PIN: 657-721-303
+2024-10-29 21:28:45,917 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:28:45] "GET / HTTP/1.1" 200 -
+2024-10-29 21:28:45,957 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:28:45] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 21:28:46,052 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:28:46] "GET /static/js/streaming.js HTTP/1.1" 200 -

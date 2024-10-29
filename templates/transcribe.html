@@ -1,37 +1,41 @@
 {% extends "base.html" %}
 
+{% block head_scripts %}
+<script src="{{ url_for('static', filename='js/audio_processor.js') }}" defer></script>
+<script src="{{ url_for('static', filename='js/streaming.js') }}" defer></script>
+{% endblock %}
+
 {% block content %}
 <style>
-    .modal.custom-modal {
-        position: fixed;
-        top: 0;
-        padding-top: 20px;
+    /* Modal styles with proper z-index */
+    .modal.error-modal {
+        z-index: 1060;
+    }
+    .modal-backdrop {
         z-index: 1050;
     }
-    .custom-modal .modal-dialog {
-        width: 576px;
-        max-width: 576px;
-        margin: 20px auto;
+    .modal.error-modal .modal-dialog {
+        max-width: 500px;
     }
-    .custom-modal .modal-content {
-        height: 192px;
+    .modal.error-modal .modal-content {
         background-color: var(--bs-danger);
-        display: flex;
-        flex-direction: column;
+        border: none;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
     }
-    .custom-modal .modal-body {
-        flex: 1;
-        overflow-y: auto;
-        color: var(--bs-light);
+    .modal.error-modal .modal-header {
+        border-bottom-color: rgba(255, 255, 255, 0.1);
     }
-    .custom-modal .modal-header {
-        background-color: rgba(0, 0, 0, 0.2);
+    .modal.error-modal .modal-footer {
+        border-top-color: rgba(255, 255, 255, 0.1);
     }
-    .custom-modal .modal-footer {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-    .custom-modal .btn-close {
+    .modal.error-modal .btn-close {
         filter: brightness(0) invert(1);
+    }
+    
+    /* Transcription output styles */
+    #transcriptionOutput {
+        min-height: 200px;
+        transition: all 0.3s ease;
     }
 </style>
 
@@ -76,7 +80,7 @@
                 <h5 class="mb-0">Transcription Output</h5>
             </div>
             <div class="card-body">
-                <div id="transcriptionOutput" class="border rounded p-3 bg-dark" style="min-height: 200px;">
+                <div id="transcriptionOutput" class="border rounded p-3 bg-dark">
                     <div class="text-muted">Transcription will appear here...</div>
                 </div>
             </div>
@@ -85,8 +89,8 @@
 </div>
 
 <!-- Error Modal -->
-<div class="modal fade custom-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog">
+<div class="modal fade error-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-0">
                 <h5 class="modal-title text-light" id="errorModalLabel">Error</h5>
@@ -95,14 +99,45 @@
             <div class="modal-body" id="errorModalBody">
             </div>
             <div class="modal-footer border-0">
-                <button type="button" class="btn btn-outline-light btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/audio_processor.js') }}"></script>
-<script src="{{ url_for('static', filename='js/streaming.js') }}"></script>
+<!-- Component Error Boundary -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.debug('Initializing component error boundary...');
+        
+        // Monitor DOM mutations for dynamic content
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    // Check for newly added error messages
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.classList && node.classList.contains('alert-danger')) {
+                            console.error('Component error:', node.textContent);
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // Initialize error modal
+        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
+            keyboard: false
+        });
+        
+        // Make error modal accessible globally
+        window.errorModal = errorModal;
+        
+        console.debug('Component error boundary initialized');
+    });
+</script>
 {% endblock %}

@@ -37,10 +37,18 @@ app.config['PROCESSING_TIMEOUT'] = 300  # 5 minutes
 
 # MIME types for static files
 app.config['MIME_TYPES'] = {
-    '.js': 'application/javascript',
-    '.css': 'text/css',
-    '.html': 'text/html',
-    '.ico': 'image/x-icon'
+    '.js': 'application/javascript; charset=utf-8',
+    '.css': 'text/css; charset=utf-8',
+    '.html': 'text/html; charset=utf-8',
+    '.ico': 'image/x-icon',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
+    '.eot': 'application/vnd.ms-fontobject'
 }
 
 # Security headers
@@ -50,9 +58,25 @@ def add_security_headers(response):
     response.headers['X-Frame-Options'] = 'SAMEORIGIN'
     response.headers['X-XSS-Protection'] = '1; mode=block'
     response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-    response.headers['Content-Security-Policy'] = "default-src 'self' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:;"
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self' https:; "
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; "
+        "style-src 'self' 'unsafe-inline' https:; "
+        "img-src 'self' data: https:; "
+        "font-src 'self' https:; "
+        "connect-src 'self' https:; "
+        "media-src 'self' https:; "
+        "object-src 'none';"
+    )
     response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Permissions-Policy'] = 'microphone=self'
+    
+    # Add caching headers for static files
+    if request.path.startswith('/static/'):
+        response.headers['Cache-Control'] = 'public, max-age=31536000'
+    else:
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        
     return response
 
 # Initialize extensions
@@ -116,15 +140,25 @@ def unhandled_exception(error):
 @log_request_metrics()
 @handle_errors()
 def serve_static(filename):
-    mimetype = None
-    for ext, mime in app.config['MIME_TYPES'].items():
-        if filename.endswith(ext):
-            mimetype = mime
-            break
+    try:
+        mimetype = None
+        for ext, mime in app.config['MIME_TYPES'].items():
+            if filename.endswith(ext):
+                mimetype = mime
+                break
+                
+        if not mimetype:
+            logger.warning(f"Unknown MIME type for file: {filename}")
+            mimetype = 'application/octet-stream'
             
-    response = send_from_directory(app.static_folder, filename, mimetype=mimetype)
-    response.headers['Cache-Control'] = 'public, max-age=31536000'
-    return response
+        response = send_from_directory(app.static_folder, filename, mimetype=mimetype)
+        response.headers['Cache-Control'] = 'public, max-age=31536000'
+        response.headers['Vary'] = 'Accept-Encoding'
+        
+        return response
+    except Exception as e:
+        logger.error(f"Error serving static file {filename}: {str(e)}")
+        raise APIError("Error serving static file", status_code=500)
 
 # Import routes and blueprints after app initialization
 from routes import *

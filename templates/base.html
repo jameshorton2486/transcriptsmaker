@@ -2,16 +2,14 @@
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Legal Transcription System</title>
-    <!-- CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
-    <!-- Error Boundary Script -->
+    
+    <!-- Error Boundary Script - Load first -->
     <script>
+        console.debug('Initializing error boundary...');
         window.onerror = function(msg, url, lineNo, columnNo, error) {
             console.error('Global error:', {
                 message: msg,
@@ -26,7 +24,26 @@
         window.addEventListener('unhandledrejection', function(event) {
             console.error('Unhandled promise rejection:', event.reason);
         });
+
+        // Monitor script loading errors
+        window.addEventListener('error', function(e) {
+            if (e.target.tagName === 'SCRIPT') {
+                console.error('Script loading error:', {
+                    src: e.target.src,
+                    error: e.error
+                });
+            }
+        }, true);
     </script>
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <!-- Core Scripts - Load with defer -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer crossorigin="anonymous"></script>
+    {% block head_scripts %}{% endblock %}
 </head>
 <body class="bg-dark text-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
@@ -52,16 +69,14 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-    {% block scripts %}{% endblock %}
-
     <!-- Error monitoring -->
     <script>
+        console.debug('Initializing error monitoring...');
         const errorHandler = {
             init() {
                 window.addEventListener('error', this.handleError.bind(this));
                 window.addEventListener('unhandledrejection', this.handlePromiseError.bind(this));
+                console.debug('Error monitoring initialized');
             },
 
             handleError(event) {
@@ -72,14 +87,38 @@
                     colno: event.colno,
                     error: event.error
                 });
+
+                // Show user-friendly error message if appropriate
+                if (event.error && event.error.isUserFacing) {
+                    this.showErrorToUser(event.error.message);
+                }
             },
 
             handlePromiseError(event) {
                 console.error('Promise error:', event.reason);
+                
+                // Show user-friendly error message if appropriate
+                if (event.reason && event.reason.isUserFacing) {
+                    this.showErrorToUser(event.reason.message);
+                }
+            },
+
+            showErrorToUser(message) {
+                const errorContainer = document.createElement('div');
+                errorContainer.className = 'alert alert-danger alert-dismissible fade show fixed-top m-3';
+                errorContainer.innerHTML = `
+                    <strong>Error:</strong> ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(errorContainer);
             }
         };
 
+        // Initialize error handler
         errorHandler.init();
     </script>
+
+    <!-- Additional Scripts -->
+    {% block scripts %}{% endblock %}
 </body>
 </html>
