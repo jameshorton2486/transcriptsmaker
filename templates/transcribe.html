@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Upload Audio File</h5>
+            </div>
+            <div class="card-body">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="audioFile" class="form-label">Select Audio File</label>
+                        <input type="file" class="form-control" id="audioFile" accept=".wav,.mp3,.flac,.mp4">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Start Transcription</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Real-time Streaming</h5>
+            </div>
+            <div class="card-body">
+                <button id="startStreaming" class="btn btn-success">Start Streaming</button>
+                <button id="stopStreaming" class="btn btn-danger" disabled>Stop</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5>Transcription Output</h5>
+            </div>
+            <div class="card-body">
+                <div id="transcriptionOutput" class="border p-3" style="min-height: 200px;">
+                    <!-- Transcription will appear here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/audio_processor.js"></script>
+<script src="/static/js/streaming.js"></script>
+{% endblock %}
