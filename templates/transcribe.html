@@ -1,6 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
+<style>
+    .modal.custom-modal {
+        padding-top: 20px;
+    }
+    .custom-modal .modal-dialog {
+        max-width: 576px; /* 6 inches */
+        margin-top: 20px;
+    }
+    .custom-modal .modal-content {
+        height: 192px; /* 2 inches */
+        display: flex;
+        flex-direction: column;
+    }
+    .custom-modal .modal-body {
+        flex: 1;
+        overflow-y: auto;
+    }
+</style>
+
 <div class="row g-4">
     <div class="col-md-6">
         <div class="card bg-dark border">
@@ -51,17 +70,17 @@
 </div>
 
 <!-- Error Modal -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade custom-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark border border-danger">
-            <div class="modal-header border-bottom border-danger bg-danger bg-opacity-25">
+            <div class="modal-header border-bottom border-danger bg-danger bg-opacity-25 py-2">
                 <h5 class="modal-title text-danger" id="errorModalLabel">Error</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body" id="errorModalBody">
+            <div class="modal-body py-2" id="errorModalBody">
             </div>
-            <div class="modal-footer border-top border-danger">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="modal-footer border-top border-danger py-2">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

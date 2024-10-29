@@ -460,3 +460,19 @@
 2024-10-29 18:46:14,655 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:46:14] "GET / HTTP/1.1" 200 -
 2024-10-29 18:46:14,670 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:46:14] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 18:46:14,754 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:46:14] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 18:46:27,019 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:46:27] "GET / HTTP/1.1" 200 -
+2024-10-29 18:48:03,233 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:53:03 UTC)" (scheduled at 2024-10-29 18:48:03.232691+00:00)
+2024-10-29 18:48:03,234 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.2063773561090874, "memory_mb": 132.72265625, "open_files": 4, "threads": 25}
+2024-10-29 18:48:03,235 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:53:03 UTC)" executed successfully
+2024-10-29 18:48:05,091 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:53:05 UTC)" (scheduled at 2024-10-29 18:48:05.091377+00:00)
+2024-10-29 18:48:05,096 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20787156777000027, "memory_mb": 133.68359375, "open_files": 4, "threads": 26}
+2024-10-29 18:48:05,097 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:53:05 UTC)" executed successfully
+2024-10-29 18:48:41,864 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:48:41] "GET / HTTP/1.1" 200 -
+2024-10-29 18:49:02,525 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:49:02] "GET / HTTP/1.1" 200 -
+2024-10-29 18:49:09,956 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:49:09] "GET / HTTP/1.1" 200 -
+2024-10-29 18:49:16,641 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:49:16] "GET / HTTP/1.1" 200 -
+2024-10-29 18:49:18,873 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:49:18] "GET / HTTP/1.1" 200 -
+2024-10-29 18:49:22,472 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:49:22] "GET / HTTP/1.1" 200 -
+2024-10-29 18:50:39,901 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:50:39] "GET / HTTP/1.1" 200 -
+2024-10-29 18:50:39,912 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:50:39] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 18:50:39,929 - werkzeug - [INFO] - 172.31.196.226 - - [29/Oct/2024 18:50:39] "GET /static/js/streaming.js HTTP/1.1" 200 -
