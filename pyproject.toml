@@ -19,4 +19,7 @@ dependencies = [
     "pydub",
     "soundfile",
     "librosa",
+    "sqlalchemy",
+    "werkzeug",
+    "psutil>=6.1.0",
 ]

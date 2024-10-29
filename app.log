@@ -50,3 +50,26 @@
 2024-10-29 17:45:08,770 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:45:08] "GET / HTTP/1.1" 200 -
 2024-10-29 17:45:08,788 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:45:08] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 17:45:08,866 - werkzeug - INFO - 172.31.196.186 - - [29/Oct/2024 17:45:08] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 17:48:21,745 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:48:23,014 - routes - INFO - Database tables created successfully
+2024-10-29 17:48:23,014 - __main__ - INFO - Starting Legal Transcription System
+2024-10-29 17:48:23,029 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 17:48:23,029 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-10-29 17:48:23,029 - werkzeug - INFO -  * Restarting with stat
+2024-10-29 17:48:23,708 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:48:24,884 - routes - INFO - Database tables created successfully
+2024-10-29 17:48:24,884 - __main__ - INFO - Starting Legal Transcription System
+2024-10-29 17:48:24,899 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 17:48:24,899 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2024-10-29 17:48:24,900 - werkzeug - INFO -  * Restarting with stat
+2024-10-29 17:48:25,435 - app - INFO - Upload folder created at /tmp/uploads
+2024-10-29 17:48:26,622 - routes - INFO - Database tables created successfully
+2024-10-29 17:48:26,622 - __main__ - INFO - Starting Legal Transcription System
+2024-10-29 17:48:26,630 - werkzeug - WARNING -  * Debugger is active!
+2024-10-29 17:48:26,632 - werkzeug - INFO -  * Debugger PIN: 234-829-656
