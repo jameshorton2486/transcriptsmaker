@@ -13,7 +13,8 @@ logger, perf_logger = setup_logging()
 # Initialize the app with proper static file configuration
 app = Flask(__name__, 
     static_url_path='/static',
-    static_folder='static'
+    static_folder='static',
+    template_folder='templates'
 )
 
 # Configuration
@@ -33,7 +34,16 @@ app.config.update(
     SEND_FILE_MAX_AGE_DEFAULT=0,  # Disable caching for development
     SESSION_COOKIE_HTTPONLY=True,  # Prevent JavaScript access to session cookie
     SESSION_COOKIE_SAMESITE='Lax',  # Less strict SameSite policy for Replit
-    PERMANENT_SESSION_LIFETIME=1800  # 30 minutes session lifetime
+    PERMANENT_SESSION_LIFETIME=1800,  # 30 minutes session lifetime
+    MIME_TYPES={
+        '.js': 'application/javascript',
+        '.css': 'text/css',
+        '.html': 'text/html',
+        '.png': 'image/png',
+        '.jpg': 'image/jpeg',
+        '.gif': 'image/gif',
+        '.svg': 'image/svg+xml'
+    }
 )
 
 # Initialize extensions
