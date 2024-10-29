@@ -29,4 +29,5 @@ dependencies = [
     "apscheduler",
     "asgiref>=3.8.1",
     "aioflask>=0.4.0",
+    "flask-cors>=5.0.0",
 ]
