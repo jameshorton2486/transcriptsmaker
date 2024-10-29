@@ -3,7 +3,9 @@ import logging
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from database import db
-from monitoring import setup_logging, start_monitoring, handle_error, log_request_metrics
+from monitoring import setup_logging, start_monitoring, log_request_metrics
+from error_handling.exceptions import TranscriptionError, ValidationError, APIError
+from error_handling.handlers import handle_errors, error_context, retry_on_error, log_errors
 
 # Set up enhanced logging
 logger, perf_logger = setup_logging()
@@ -43,9 +45,49 @@ db.init_app(app)
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 logger.info(f"Upload folder created at {app.config['UPLOAD_FOLDER']}")
 
+# Error handlers
+@app.errorhandler(ValidationError)
+def handle_validation_error(error):
+    return jsonify(error.to_dict()), 400
+
+@app.errorhandler(APIError)
+def handle_api_error(error):
+    return jsonify(error.to_dict()), error.status_code
+
+@app.errorhandler(TranscriptionError)
+def handle_transcription_error(error):
+    return jsonify(error.to_dict()), 500
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    error = ValidationError(
+        f"File too large. Maximum size is {app.config['MAX_CONTENT_LENGTH']/1024/1024:.0f}MB",
+        field='file_size'
+    )
+    return jsonify(error.to_dict()), 413
+
+@app.errorhandler(404)
+def not_found_error(error):
+    error = APIError("Resource not found", status_code=404)
+    return jsonify(error.to_dict()), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    with error_context("Database rollback"):
+        db.session.rollback()
+    error = APIError("Internal server error", status_code=500)
+    return jsonify(error.to_dict()), 500
+
+@app.errorhandler(Exception)
+def unhandled_exception(error):
+    logger.error(f"Unhandled exception: {str(error)}\nTraceback:\n{traceback.format_exc()}")
+    error = APIError("An unexpected error occurred", status_code=500)
+    return jsonify(error.to_dict()), 500
+
 # Serve static files with proper MIME types
 @app.route('/static/<path:filename>')
 @log_request_metrics()
+@handle_errors()
 def serve_static(filename):
     mimetype = None
     for ext, mime in app.config['MIME_TYPES'].items():
@@ -65,32 +107,12 @@ app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 # Initialize database
 with app.app_context():
     try:
-        db.create_all()
-        logger.info("Database tables created successfully")
+        with error_context("Database initialization"):
+            db.create_all()
+            logger.info("Database tables created successfully")
     except Exception as e:
         logger.error(f"Error creating database tables: {str(e)}")
         raise
-
-# Error handlers
-@app.errorhandler(413)
-def request_entity_too_large(error):
-    return handle_error({
-        'error': 'File too large',
-        'max_size': f"{app.config['MAX_CONTENT_LENGTH']/1024/1024:.0f}MB"
-    })
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return handle_error(error)
-
-@app.errorhandler(500)
-def internal_error(error):
-    db.session.rollback()
-    return handle_error(error)
-
-@app.errorhandler(Exception)
-def unhandled_exception(error):
-    return handle_error(error)
 
 # Start monitoring
 scheduler = start_monitoring(app)
