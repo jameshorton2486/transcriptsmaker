@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for
 from flask_cors import CORS
 import os
 import logging
@@ -31,17 +31,9 @@ app.config.update(
     ALLOWED_EXTENSIONS={'wav', 'mp3', 'flac', 'mp4'},
     PROCESSING_TIMEOUT=300,  # 5 minutes
     SEND_FILE_MAX_AGE_DEFAULT=0,  # Disable caching for development
-    PREFERRED_URL_SCHEME='https',  # Force HTTPS
-    SERVER_NAME=None,  # Allow Replit to handle hostname
-    MIME_TYPES={
-        '.js': 'application/javascript',
-        '.css': 'text/css',
-        '.html': 'text/html',
-        '.png': 'image/png',
-        '.jpg': 'image/jpeg',
-        '.gif': 'image/gif',
-        '.svg': 'image/svg+xml'
-    }
+    SESSION_COOKIE_HTTPONLY=True,  # Prevent JavaScript access to session cookie
+    SESSION_COOKIE_SAMESITE='Lax',  # Less strict SameSite policy for Replit
+    PERMANENT_SESSION_LIFETIME=1800  # 30 minutes session lifetime
 )
 
 # Initialize extensions
@@ -59,7 +51,6 @@ def add_security_headers(response):
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'SAMEORIGIN',
         'X-XSS-Protection': '1; mode=block',
-        'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
         'Content-Security-Policy': (
             "default-src 'self' https:; "
             "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; "
