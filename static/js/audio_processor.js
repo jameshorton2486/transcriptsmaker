@@ -2,6 +2,7 @@ class AudioProcessor {
     constructor() {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.allowedFormats = ['wav', 'mp3', 'flac', 'mp4'];
+        this.errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
         this.initializeUploadForm();
     }
 
@@ -30,7 +31,7 @@ class AudioProcessor {
             const file = fileInput.files[0];
             
             if (!file) {
-                this.showError('Please select an audio file', 'VALIDATION_ERROR');
+                this.showError('No audio file was uploaded. Please select an audio file to continue.', 'VALIDATION_ERROR');
                 return;
             }
 
@@ -97,16 +98,49 @@ class AudioProcessor {
     }
 
     showError(message, errorType = 'UNKNOWN_ERROR') {
-        const output = document.getElementById('transcriptionOutput');
-        if (!output) return;
-
-        const errorHtml = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <strong>${errorType}:</strong> ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        // Update modal content
+        const modalTitle = document.getElementById('errorModalLabel');
+        const modalBody = document.getElementById('errorModalBody');
+        
+        modalTitle.textContent = this.getErrorTypeTitle(errorType);
+        modalBody.innerHTML = `
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>
+                <strong class="text-danger">${errorType}</strong>
             </div>
+            <p class="mb-0">${message}</p>
         `;
-        output.innerHTML = errorHtml;
+
+        // Show the modal
+        this.errorModal.show();
+
+        // Also update the transcription output area with an error indicator
+        const output = document.getElementById('transcriptionOutput');
+        if (output) {
+            output.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+                    <strong>${errorType}:</strong> An error occurred. See error details in the modal.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+        }
+    }
+
+    getErrorTypeTitle(errorType) {
+        switch (errorType) {
+            case 'VALIDATION_ERROR':
+                return 'Validation Error';
+            case 'FORMAT_ERROR':
+                return 'File Format Error';
+            case 'SIZE_ERROR':
+                return 'File Size Error';
+            case 'NETWORK_ERROR':
+                return 'Network Error';
+            case 'PROCESSING_ERROR':
+                return 'Processing Error';
+            default:
+                return 'Error';
+        }
     }
 
     updateTranscriptionOutput(data) {
@@ -119,15 +153,13 @@ class AudioProcessor {
         // Clear any existing error messages
         output.querySelectorAll('.alert').forEach(alert => alert.remove());
 
-        let html = '';
-        
         if (data.error) {
             this.showError(data.error, data.error_code || 'API_ERROR');
             return;
         }
         
+        let html = '<div class="transcription-content">';
         if (data.speakers && data.speakers.length > 0) {
-            html = '<div class="transcription-content">';
             data.speakers.forEach(speaker => {
                 html += `
                     <div class="mb-3 p-2 border-start border-primary border-3">
@@ -138,15 +170,10 @@ class AudioProcessor {
                         <p class="mb-1">${speaker.text}</p>
                     </div>`;
             });
-            html += '</div>';
         } else {
-            html = `
-                <div class="transcription-content">
-                    <p>${data.text || 'No transcription available'}</p>
-                </div>`;
+            html += `<p>${data.text || 'No transcription available'}</p>`;
         }
         
-        // Add confidence score if available
         if (data.confidence) {
             html += `
                 <div class="mt-3 text-muted">
@@ -154,6 +181,7 @@ class AudioProcessor {
                 </div>`;
         }
         
+        html += '</div>';
         output.innerHTML = html;
     }
 

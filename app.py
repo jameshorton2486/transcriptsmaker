@@ -6,6 +6,8 @@ from database import db
 from monitoring import setup_logging, start_monitoring, log_request_metrics
 from error_handling.exceptions import TranscriptionError, ValidationError, APIError
 from error_handling.handlers import handle_errors, error_context, retry_on_error, log_errors
+from transcription.deepgram_client import DeepgramTranscriptionClient, DeepgramAPIError
+import asyncio
 
 # Set up enhanced logging
 logger, perf_logger = setup_logging()
@@ -53,6 +55,10 @@ def handle_validation_error(error):
 @app.errorhandler(APIError)
 def handle_api_error(error):
     return jsonify(error.to_dict()), error.status_code
+
+@app.errorhandler(DeepgramAPIError)
+def handle_deepgram_error(error):
+    return jsonify(error.to_dict()), 500
 
 @app.errorhandler(TranscriptionError)
 def handle_transcription_error(error):
@@ -104,14 +110,28 @@ from api import api_bp, swagger_ui_blueprint, SWAGGER_URL
 app.register_blueprint(api_bp)
 app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
-# Initialize database
+async def validate_deepgram():
+    """Validate Deepgram API key on startup"""
+    try:
+        client = DeepgramTranscriptionClient()
+        await client.validate_api_key()
+        logger.info("Deepgram API key validation successful")
+    except DeepgramAPIError as e:
+        logger.error(f"Deepgram API key validation failed: {str(e)}")
+        raise
+
+# Initialize database and validate Deepgram
 with app.app_context():
     try:
         with error_context("Database initialization"):
             db.create_all()
             logger.info("Database tables created successfully")
+            
+        # Validate Deepgram API key
+        asyncio.run(validate_deepgram())
+        
     except Exception as e:
-        logger.error(f"Error creating database tables: {str(e)}")
+        logger.error(f"Initialization error: {str(e)}")
         raise
 
 # Start monitoring
