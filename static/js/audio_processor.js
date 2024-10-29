@@ -11,7 +11,7 @@ class AudioProcessor {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
             this.allowedFormats = ['wav', 'mp3', 'flac', 'mp4'];
             
-            // Initialize error modal
+            // Initialize error modal with Bootstrap
             console.debug('Initializing error modal...');
             const errorModalElement = document.getElementById('errorModal');
             if (!errorModalElement) {
@@ -23,6 +23,16 @@ class AudioProcessor {
                 keyboard: false
             });
 
+            // Add modal event listeners
+            errorModalElement.addEventListener('show.bs.modal', () => {
+                console.debug('Error modal is being shown');
+            });
+
+            errorModalElement.addEventListener('hidden.bs.modal', () => {
+                console.debug('Error modal was hidden');
+                this.cleanupModal();
+            });
+
             // Initialize form after modal setup
             this.initializeUploadForm();
             this.initialized = true;
@@ -31,6 +41,14 @@ class AudioProcessor {
             console.error('Error initializing AudioProcessor:', error);
             this.handleInitializationError(error);
             throw error;
+        }
+    }
+
+    cleanupModal() {
+        console.debug('Cleaning up error modal content');
+        const modalBody = document.getElementById('errorModalBody');
+        if (modalBody) {
+            modalBody.innerHTML = '';
         }
     }
 
@@ -58,7 +76,6 @@ class AudioProcessor {
             throw new Error('File input element not found. Please check HTML structure.');
         }
 
-        // Enhance file input validation
         fileInput.addEventListener('change', (e) => {
             console.debug('File input changed, validating file...');
             const file = e.target.files[0];
@@ -76,7 +93,7 @@ class AudioProcessor {
                 return;
             }
 
-            if (file.size > 2 * 1024 * 1024 * 1024) { // 2GB
+            if (file.size > 2 * 1024 * 1024 * 1024) {
                 this.showError(
                     `File size (${(file.size / (1024 * 1024 * 1024)).toFixed(2)}GB) exceeds maximum limit of 2GB`,
                     'SIZE_ERROR'
@@ -297,7 +314,6 @@ class AudioProcessor {
     }
 }
 
-// Enhanced initialization with proper error handling
 document.addEventListener('DOMContentLoaded', () => {
     console.debug('DOM loaded, initializing AudioProcessor...');
     try {
@@ -307,15 +323,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } catch (error) {
         console.error('Failed to initialize AudioProcessor:', error);
-        // Show error in UI even if modal isn't available
-        const errorContainer = document.createElement('div');
-        errorContainer.className = 'alert alert-danger m-3';
-        errorContainer.innerHTML = `
-            <h4 class="alert-heading">Initialization Error</h4>
-            <p>${error.message}</p>
-            <hr>
-            <p class="mb-0">Please refresh the page or contact support if the problem persists.</p>
-        `;
-        document.body.insertBefore(errorContainer, document.body.firstChild);
+        if (window.AppErrors) {
+            window.AppErrors.logError('initialization', {
+                component: 'AudioProcessor',
+                message: error.message,
+                stack: error.stack
+            });
+        } else {
+            const errorContainer = document.createElement('div');
+            errorContainer.className = 'alert alert-danger m-3';
+            errorContainer.innerHTML = `
+                <h4 class="alert-heading">Initialization Error</h4>
+                <p>${error.message}</p>
+                <hr>
+                <p class="mb-0">Please refresh the page or contact support if the problem persists.</p>
+            `;
+            document.body.insertBefore(errorContainer, document.body.firstChild);
+        }
     }
 });

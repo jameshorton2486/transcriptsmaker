@@ -1221,3 +1221,93 @@ jinja2.exceptions.UndefinedError: 'super' is undefined
 2024-10-29 22:31:55,089 - werkzeug - [INFO] - [_internal:97] - 172.31.196.170 - - [29/Oct/2024 22:31:55] "GET / HTTP/1.1" 200 -
 2024-10-29 22:31:55,182 - werkzeug - [INFO] - [_internal:97] - 172.31.196.170 - - [29/Oct/2024 22:31:55] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 22:31:55,190 - werkzeug - [INFO] - [_internal:97] - 172.31.196.170 - - [29/Oct/2024 22:31:55] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 22:36:34,505 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:36:34,509 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:36:34,509 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:36:34,509 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:36:34,510 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:36:34,510 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:36:34,510 - root - [INFO] - [main:43] -   SERVER_PORT: 5000
+2024-10-29 22:36:34,510 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:36:34,539 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.59:5000
+2024-10-29 22:36:34,539 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:36:36,719 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:36:36,731 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:36:36] "GET / HTTP/1.1" 200 -
+2024-10-29 22:37:03,875 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:37:03,876 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:37:03,876 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:37:03,876 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:37:03,877 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:37:03,877 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:37:03,877 - root - [INFO] - [main:43] -   SERVER_PORT: 5000
+2024-10-29 22:37:03,877 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:37:03,883 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.59:5000
+2024-10-29 22:37:03,883 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:37:04,191 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:37:04,197 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:37:04] "GET / HTTP/1.1" 200 -
+2024-10-29 22:37:07,716 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:37:07,717 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:37:07] "GET / HTTP/1.1" 200 -
+2024-10-29 22:37:32,620 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:37:32,621 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:37:32] "GET / HTTP/1.1" 200 -
+2024-10-29 22:37:37,834 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:37:37,835 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:37:37] "GET / HTTP/1.1" 200 -
+2024-10-29 22:37:48,043 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:37:48,045 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:37:48,045 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:37:48,045 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:37:48,045 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:37:48,045 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:37:48,045 - root - [INFO] - [main:43] -   SERVER_PORT: 8080
+2024-10-29 22:37:48,045 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:37:48,051 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.59:8080
+2024-10-29 22:37:48,051 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:37:48,380 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:37:48,386 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:37:48] "GET / HTTP/1.1" 200 -
+2024-10-29 22:37:48,520 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:37:48,520 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:37:48] "GET / HTTP/1.1" 200 -
+2024-10-29 22:37:48,615 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:37:48,615 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:37:48] "GET / HTTP/1.1" 200 -
+2024-10-29 22:38:02,341 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:38:02,342 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:38:02] "GET / HTTP/1.1" 200 -
+2024-10-29 22:38:02,620 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:38:02] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 22:38:02,684 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:38:02] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 22:38:03,339 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:38:03] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2024-10-29 22:41:04,740 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:41:04,741 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:41:04,741 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:41:04,741 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:41:04,741 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:41:04,741 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:41:04,741 - root - [INFO] - [main:43] -   SERVER_PORT: 5000
+2024-10-29 22:41:04,742 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:41:04,747 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.59:5000
+2024-10-29 22:41:04,747 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:41:07,926 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:41:07,928 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:41:07,928 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:41:07,928 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:41:07,928 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:41:07,928 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:41:07,928 - root - [INFO] - [main:43] -   SERVER_PORT: 5000
+2024-10-29 22:41:07,928 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:41:07,935 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.59:5000
+2024-10-29 22:41:07,935 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:41:08,596 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:41:08,604 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:41:08] "GET / HTTP/1.1" 200 -
+2024-10-29 22:41:08,693 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:41:08] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 22:41:08,701 - werkzeug - [INFO] - [_internal:97] - 172.31.196.59 - - [29/Oct/2024 22:41:08] "GET /static/js/streaming.js HTTP/1.1" 200 -
