@@ -31,7 +31,7 @@ app.config.update(
     MAX_CONTENT_LENGTH=2 * 1024 * 1024 * 1024,  # 2GB
     ALLOWED_EXTENSIONS={'wav', 'mp3', 'flac', 'mp4'},
     PROCESSING_TIMEOUT=300,  # 5 minutes
-    SEND_FILE_MAX_AGE_DEFAULT=0,  # Disable caching for development
+    SEND_FILE_MAX_AGE_DEFAULT=31536000,  # Enable caching for static files
     SESSION_COOKIE_HTTPONLY=True,  # Prevent JavaScript access to session cookie
     SESSION_COOKIE_SAMESITE='Lax',  # Less strict SameSite policy for Replit
     PERMANENT_SESSION_LIFETIME=1800,  # 30 minutes session lifetime
@@ -54,10 +54,14 @@ db.init_app(app)
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 logger.info(f"Upload folder created at {app.config['UPLOAD_FOLDER']}")
 
-# Security headers
+# Security headers and MIME type handling
 @app.after_request
-def add_security_headers(response):
+def add_header(response):
+    # Update security headers for proper web exposure
     response.headers.update({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'SAMEORIGIN',
         'X-XSS-Protection': '1; mode=block',
@@ -75,18 +79,15 @@ def add_security_headers(response):
         'Permissions-Policy': 'microphone=self'
     })
     
-    # Set proper content type headers
-    if response.mimetype is None:
-        ext = os.path.splitext(request.path)[-1] if request.path else ''
-        response.mimetype = app.config['MIME_TYPES'].get(ext, 'text/html')
-    
-    # Configure caching based on environment
-    if app.debug:
-        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
-    elif request.path.startswith('/static/'):
-        response.headers['Cache-Control'] = 'public, max-age=31536000'
-    else:
-        response.headers['Cache-Control'] = 'no-cache, must-revalidate'
+    # Handle static files
+    if request.path.startswith('/static/'):
+        response.cache_control.max_age = 31536000
+        response.cache_control.public = True
+        
+        # Set proper MIME types
+        ext = os.path.splitext(request.path)[-1]
+        if ext in app.config['MIME_TYPES']:
+            response.mimetype = app.config['MIME_TYPES'][ext]
     
     return response
 
