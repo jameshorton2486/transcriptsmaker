@@ -9,31 +9,95 @@
     
     <!-- Error Boundary Script - Load first -->
     <script>
-        console.debug('Initializing error boundary...');
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Global error:', {
-                message: msg,
-                url: url,
-                lineNo: lineNo,
-                columnNo: columnNo,
-                error: error
-            });
-            return false;
+        console.debug('Setting up global error boundary...');
+        window.AppErrors = {
+            errors: [],
+            initialized: false,
+            maxErrors: 10,
+
+            init() {
+                if (this.initialized) return;
+                this.setupErrorHandlers();
+                this.initialized = true;
+                console.debug('Global error boundary initialized');
+            },
+
+            setupErrorHandlers() {
+                window.onerror = (msg, url, lineNo, columnNo, error) => {
+                    this.logError('runtime', {
+                        message: msg,
+                        url: url,
+                        lineNo: lineNo,
+                        columnNo: columnNo,
+                        error: error
+                    });
+                    return false;
+                };
+
+                window.addEventListener('unhandledrejection', (event) => {
+                    this.logError('promise', {
+                        message: event.reason.message || event.reason,
+                        stack: event.reason.stack
+                    });
+                });
+
+                window.addEventListener('error', (event) => {
+                    if (event.target.tagName === 'SCRIPT') {
+                        this.logError('script', {
+                            message: 'Script loading error',
+                            src: event.target.src,
+                            error: event.error
+                        });
+                    }
+                }, true);
+            },
+
+            logError(type, details) {
+                const error = {
+                    type: type,
+                    timestamp: new Date().toISOString(),
+                    details: details
+                };
+                
+                console.error(`[${error.type}] Error:`, error.details);
+                
+                this.errors.push(error);
+                if (this.errors.length > this.maxErrors) {
+                    this.errors.shift();
+                }
+                
+                this.showErrorUI(error);
+            },
+
+            showErrorUI(error) {
+                const container = document.getElementById('errorContainer') || this.createErrorContainer();
+                const alert = document.createElement('div');
+                alert.className = 'alert alert-danger alert-dismissible fade show';
+                alert.innerHTML = `
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <div>
+                            <strong>${error.type} Error:</strong> ${error.details.message}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    </div>
+                    ${error.details.stack ? `<pre class="mt-2 small">${error.details.stack}</pre>` : ''}
+                `;
+                container.appendChild(alert);
+            },
+
+            createErrorContainer() {
+                const container = document.createElement('div');
+                container.id = 'errorContainer';
+                container.className = 'position-fixed top-0 end-0 p-3';
+                container.style.zIndex = '1050';
+                document.body.appendChild(container);
+                return container;
+            }
         };
 
-        window.addEventListener('unhandledrejection', function(event) {
-            console.error('Unhandled promise rejection:', event.reason);
-        });
-
-        // Monitor script loading errors
-        window.addEventListener('error', function(e) {
-            if (e.target.tagName === 'SCRIPT') {
-                console.error('Script loading error:', {
-                    src: e.target.src,
-                    error: e.error
-                });
-            }
-        }, true);
+        // Initialize error boundary
+        document.addEventListener('DOMContentLoaded', () => AppErrors.init());
     </script>
 
     <!-- CSS -->
@@ -65,57 +129,63 @@
         </div>
     </nav>
 
-    <div class="container mt-4">
+    <!-- Main Content -->
+    <div class="container mt-4" id="mainContent">
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Error monitoring -->
-    <script>
-        console.debug('Initializing error monitoring...');
-        const errorHandler = {
-            init() {
-                window.addEventListener('error', this.handleError.bind(this));
-                window.addEventListener('unhandledrejection', this.handlePromiseError.bind(this));
-                console.debug('Error monitoring initialized');
-            },
+    <!-- Error Modal -->
+    <div class="modal fade error-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-danger text-light">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="errorModalBody">
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            handleError(event) {
-                console.error('Runtime error:', {
-                    message: event.message,
-                    filename: event.filename,
-                    lineno: event.lineno,
-                    colno: event.colno,
-                    error: event.error
+    <!-- Component Error Boundary -->
+    <script defer>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.debug('Initializing component observers...');
+            
+            // Monitor DOM mutations for dynamic content
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList') {
+                        mutation.addedNodes.forEach(function(node) {
+                            if (node.nodeType === 1) { // Element node
+                                // Monitor for error messages
+                                const errorElements = node.querySelectorAll('.alert-danger, .text-danger');
+                                errorElements.forEach(element => {
+                                    console.error('Component error:', {
+                                        message: element.textContent,
+                                        component: element.closest('[data-component]')?.dataset.component || 'unknown',
+                                        timestamp: new Date().toISOString()
+                                    });
+                                });
+                            }
+                        });
+                    }
                 });
+            });
 
-                // Show user-friendly error message if appropriate
-                if (event.error && event.error.isUserFacing) {
-                    this.showErrorToUser(event.error.message);
-                }
-            },
-
-            handlePromiseError(event) {
-                console.error('Promise error:', event.reason);
-                
-                // Show user-friendly error message if appropriate
-                if (event.reason && event.reason.isUserFacing) {
-                    this.showErrorToUser(event.reason.message);
-                }
-            },
-
-            showErrorToUser(message) {
-                const errorContainer = document.createElement('div');
-                errorContainer.className = 'alert alert-danger alert-dismissible fade show fixed-top m-3';
-                errorContainer.innerHTML = `
-                    <strong>Error:</strong> ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                document.body.appendChild(errorContainer);
-            }
-        };
-
-        // Initialize error handler
-        errorHandler.init();
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class']
+            });
+            
+            console.debug('Component observers initialized');
+        });
     </script>
 
     <!-- Additional Scripts -->

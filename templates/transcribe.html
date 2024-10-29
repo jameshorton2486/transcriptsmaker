@@ -7,41 +7,22 @@
 
 {% block content %}
 <style>
-    /* Modal styles with proper z-index */
     .modal.error-modal {
         z-index: 1060;
     }
     .modal-backdrop {
         z-index: 1050;
     }
-    .modal.error-modal .modal-dialog {
-        max-width: 500px;
-    }
-    .modal.error-modal .modal-content {
-        background-color: var(--bs-danger);
-        border: none;
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
-    }
-    .modal.error-modal .modal-header {
-        border-bottom-color: rgba(255, 255, 255, 0.1);
-    }
-    .modal.error-modal .modal-footer {
-        border-top-color: rgba(255, 255, 255, 0.1);
-    }
-    .modal.error-modal .btn-close {
-        filter: brightness(0) invert(1);
-    }
-    
-    /* Transcription output styles */
-    #transcriptionOutput {
+    .transcription-output {
         min-height: 200px;
-        transition: all 0.3s ease;
+        max-height: 500px;
+        overflow-y: auto;
     }
 </style>
 
 <div class="row g-4">
     <div class="col-md-6">
-        <div class="card bg-dark border">
+        <div class="card bg-dark border" data-component="upload">
             <div class="card-header">
                 <h5 class="mb-0">Upload Audio File</h5>
             </div>
@@ -52,21 +33,28 @@
                         <input type="file" class="form-control" id="audioFile" accept=".wav,.mp3,.flac,.mp4">
                         <div class="form-text">Supported formats: WAV, MP3, FLAC, MP4</div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Start Transcription</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
+                        Start Transcription
+                    </button>
                 </form>
             </div>
         </div>
     </div>
     
     <div class="col-md-6">
-        <div class="card bg-dark border">
+        <div class="card bg-dark border" data-component="streaming">
             <div class="card-header">
                 <h5 class="mb-0">Real-time Streaming</h5>
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    <button id="startStreaming" class="btn btn-success">Start Streaming</button>
-                    <button id="stopStreaming" class="btn btn-danger" disabled>Stop Streaming</button>
+                    <button id="startStreaming" class="btn btn-success">
+                        <i class="bi bi-mic-fill me-2"></i>Start Streaming
+                    </button>
+                    <button id="stopStreaming" class="btn btn-danger" disabled>
+                        <i class="bi bi-stop-fill me-2"></i>Stop Streaming
+                    </button>
                 </div>
             </div>
         </div>
@@ -75,12 +63,15 @@
 
 <div class="row mt-4">
     <div class="col-12">
-        <div class="card bg-dark border">
-            <div class="card-header">
+        <div class="card bg-dark border" data-component="output">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Transcription Output</h5>
+                <button class="btn btn-sm btn-outline-secondary" onclick="clearTranscription()">
+                    <i class="bi bi-trash me-1"></i>Clear
+                </button>
             </div>
             <div class="card-body">
-                <div id="transcriptionOutput" class="border rounded p-3 bg-dark">
+                <div id="transcriptionOutput" class="transcription-output border rounded p-3 bg-dark">
                     <div class="text-muted">Transcription will appear here...</div>
                 </div>
             </div>
@@ -88,56 +79,36 @@
     </div>
 </div>
 
-<!-- Error Modal -->
-<div class="modal fade error-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header border-0">
-                <h5 class="modal-title text-light" id="errorModalLabel">Error</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body" id="errorModalBody">
-            </div>
-            <div class="modal-footer border-0">
-                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script defer>
+    // Helper function to clear transcription
+    function clearTranscription() {
+        const output = document.getElementById('transcriptionOutput');
+        if (output) {
+            output.innerHTML = '<div class="text-muted">Transcription will appear here...</div>';
+        }
+    }
 
-<!-- Component Error Boundary -->
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        console.debug('Initializing component error boundary...');
+    // Initialize components when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        console.debug('Initializing transcription components...');
         
-        // Monitor DOM mutations for dynamic content
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'childList') {
-                    // Check for newly added error messages
-                    mutation.addedNodes.forEach(function(node) {
-                        if (node.classList && node.classList.contains('alert-danger')) {
-                            console.error('Component error:', node.textContent);
-                        }
-                    });
-                }
+        try {
+            // Initialize audio processor
+            if (!window.audioProcessor) {
+                window.audioProcessor = new AudioProcessor();
+            }
+            
+            // Initialize stream handler
+            if (!window.streamHandler) {
+                window.streamHandler = new StreamHandler();
+            }
+        } catch (error) {
+            console.error('Component initialization failed:', error);
+            AppErrors.logError('component', {
+                message: 'Failed to initialize transcription components',
+                error: error
             });
-        });
-
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
-
-        // Initialize error modal
-        const errorModal = new bootstrap.Modal(document.getElementById('errorModal'), {
-            keyboard: false
-        });
-        
-        // Make error modal accessible globally
-        window.errorModal = errorModal;
-        
-        console.debug('Component error boundary initialized');
+        }
     });
 </script>
 {% endblock %}
