@@ -2,7 +2,6 @@ import os
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
-import azure.cognitiveservices.speech as speechsdk
 from werkzeug.utils import secure_filename
 
 class Base(DeclarativeBase):
