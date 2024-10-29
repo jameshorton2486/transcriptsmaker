@@ -37,7 +37,7 @@ if __name__ == "__main__":
         config_info = {
             'ENVIRONMENT': os.environ.get('FLASK_ENV', 'production'),
             'DEBUG_MODE': os.environ.get('FLASK_DEBUG', 'False').lower() == 'true',
-            'SERVER_PORT': 5000  # Updated to use port 5000
+            'SERVER_PORT': 5000  # Using port 5000 for Replit compatibility
         }
         for key, value in config_info.items():
             logger.info(f"  {key}: {value}")
@@ -45,8 +45,8 @@ if __name__ == "__main__":
         # Start the application
         logger.info("Starting Legal Transcription System...")
         app.run(
-            host="0.0.0.0",
-            port=5000,  # Updated to use port 5000
+            host="0.0.0.0",  # Listen on all interfaces
+            port=5000,  # Using port 5000 for Replit compatibility
             debug=False,  # Keep debug mode disabled for production
             use_reloader=False  # Prevent duplicate processes
         )

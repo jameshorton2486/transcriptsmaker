@@ -32,6 +32,7 @@ app.config.update(
     PROCESSING_TIMEOUT=300,  # 5 minutes
     SEND_FILE_MAX_AGE_DEFAULT=0,  # Disable caching for development
     PREFERRED_URL_SCHEME='https',  # Force HTTPS
+    SERVER_NAME=None,  # Allow Replit to handle hostname
     MIME_TYPES={
         '.js': 'application/javascript',
         '.css': 'text/css',
@@ -65,13 +66,18 @@ def add_security_headers(response):
             "style-src 'self' 'unsafe-inline' https:; "
             "img-src 'self' data: https:; "
             "font-src 'self' https:; "
-            "connect-src 'self' https:; "
+            "connect-src 'self' https: wss:; "  # Added wss: for WebSocket
             "media-src 'self' https:; "
             "object-src 'none';"
         ),
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'microphone=self'
     })
+    
+    # Set proper content type headers
+    if response.mimetype is None:
+        ext = os.path.splitext(request.path)[-1] if request.path else ''
+        response.mimetype = app.config['MIME_TYPES'].get(ext, 'text/html')
     
     # Configure caching based on environment
     if app.debug:
@@ -92,10 +98,21 @@ def not_found_error(error):
 
 @app.errorhandler(500)
 def internal_error(error):
-    logger.error(f"Internal server error: {str(error)}")
+    error_context = {
+        'url': request.url,
+        'method': request.method,
+        'error': str(error),
+        'stack_trace': getattr(error, '__traceback__', None)
+    }
+    logger.error(f"Internal server error: {error_context}")
+    
     if request.path.startswith('/api/'):
-        return jsonify({'error': 'Internal server error', 'code': 500}), 500
-    return render_template('500.html'), 500
+        return jsonify({
+            'error': 'Internal server error',
+            'code': 500,
+            'message': str(error) if app.debug else 'An unexpected error occurred'
+        }), 500
+    return render_template('500.html', error=error if app.debug else None), 500
 
 # Import routes
 from routes import *
