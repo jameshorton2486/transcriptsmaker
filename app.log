@@ -1133,3 +1133,61 @@ jinja2.exceptions.UndefinedError: 'super' is undefined
 2024-10-29 22:20:37,182 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:37] "GET / HTTP/1.1" 200 -
 2024-10-29 22:20:37,266 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:37] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 22:20:37,275 - werkzeug - [INFO] - [_internal:97] - 172.31.196.5 - - [29/Oct/2024 22:20:37] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 22:25:48,898 - root - [INFO] - [app:53] - Upload folder created at /tmp/uploads
+2024-10-29 22:25:48,904 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:25:48,904 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:25:48,904 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:25:48,905 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:25:48,905 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:25:48,905 - root - [INFO] - [main:43] -   SERVER_PORT: 5000
+2024-10-29 22:25:48,905 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:25:49,177 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.170:5000
+2024-10-29 22:25:49,177 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:26:49,906 - root - [INFO] - [app:54] - Upload folder created at /tmp/uploads
+2024-10-29 22:26:49,909 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:26:49,909 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:26:49,909 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:26:49,909 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:26:49,909 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:26:49,909 - root - [INFO] - [main:43] -   SERVER_PORT: 8080
+2024-10-29 22:26:49,909 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:26:49,925 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.170:8080
+2024-10-29 22:26:49,925 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:26:50,348 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:26:50,354 - werkzeug - [INFO] - [_internal:97] - 172.31.196.170 - - [29/Oct/2024 22:26:50] "GET / HTTP/1.1" 200 -
+2024-10-29 22:28:15,335 - root - [INFO] - [app:52] - Upload folder created at /tmp/uploads
+2024-10-29 22:28:15,337 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:28:15,337 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:28:15,337 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:28:15,337 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:28:15,337 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:28:15,337 - root - [INFO] - [main:43] -   SERVER_PORT: 8080
+2024-10-29 22:28:15,337 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:28:15,344 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8080
+ * Running on http://172.31.196.170:8080
+2024-10-29 22:28:15,344 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:29:25,707 - root - [INFO] - [app:52] - Upload folder created at /tmp/uploads
+2024-10-29 22:29:25,708 - root - [INFO] - [main:27] - ============================================================
+2024-10-29 22:29:25,709 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-29 22:29:25,709 - root - [INFO] - [main:29] - ============================================================
+2024-10-29 22:29:25,709 - root - [INFO] - [main:43] -   ENVIRONMENT: production
+2024-10-29 22:29:25,709 - root - [INFO] - [main:43] -   DEBUG_MODE: False
+2024-10-29 22:29:25,709 - root - [INFO] - [main:43] -   SERVER_PORT: 5000
+2024-10-29 22:29:25,709 - root - [INFO] - [main:46] - Starting Legal Transcription System...
+2024-10-29 22:29:25,717 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.170:5000
+2024-10-29 22:29:25,717 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-29 22:29:34,601 - root - [INFO] - [routes:7] - Serving index page
+2024-10-29 22:29:34,609 - werkzeug - [INFO] - [_internal:97] - 172.31.196.170 - - [29/Oct/2024 22:29:34] "GET / HTTP/1.1" 200 -
+2024-10-29 22:29:34,696 - werkzeug - [INFO] - [_internal:97] - 172.31.196.170 - - [29/Oct/2024 22:29:34] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 22:29:34,705 - werkzeug - [INFO] - [_internal:97] - 172.31.196.170 - - [29/Oct/2024 22:29:34] "GET /static/js/streaming.js HTTP/1.1" 200 -

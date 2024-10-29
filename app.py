@@ -10,8 +10,11 @@ from database import db
 # Set up enhanced logging
 logger, perf_logger = setup_logging()
 
-# Initialize the app
-app = Flask(__name__, static_url_path='/static', static_folder='static')
+# Initialize the app with proper static file configuration
+app = Flask(__name__, 
+    static_url_path='/static',
+    static_folder='static'
+)
 
 # Configuration
 app.config.update(
@@ -27,20 +30,16 @@ app.config.update(
     MAX_CONTENT_LENGTH=2 * 1024 * 1024 * 1024,  # 2GB
     ALLOWED_EXTENSIONS={'wav', 'mp3', 'flac', 'mp4'},
     PROCESSING_TIMEOUT=300,  # 5 minutes
-    SEND_FILE_MAX_AGE_DEFAULT=31536000,  # 1 year
+    SEND_FILE_MAX_AGE_DEFAULT=0,  # Disable caching for development
+    PREFERRED_URL_SCHEME='https',  # Force HTTPS
     MIME_TYPES={
-        '.js': 'application/javascript; charset=utf-8',
-        '.css': 'text/css; charset=utf-8',
-        '.html': 'text/html; charset=utf-8',
-        '.ico': 'image/x-icon',
+        '.js': 'application/javascript',
+        '.css': 'text/css',
+        '.html': 'text/html',
         '.png': 'image/png',
         '.jpg': 'image/jpeg',
         '.gif': 'image/gif',
-        '.svg': 'image/svg+xml',
-        '.woff': 'font/woff',
-        '.woff2': 'font/woff2',
-        '.ttf': 'font/ttf',
-        '.eot': 'application/vnd.ms-fontobject'
+        '.svg': 'image/svg+xml'
     }
 )
 
@@ -74,10 +73,13 @@ def add_security_headers(response):
         'Permissions-Policy': 'microphone=self'
     })
     
-    if request.path.startswith('/static/'):
+    # Configure caching based on environment
+    if app.debug:
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    elif request.path.startswith('/static/'):
         response.headers['Cache-Control'] = 'public, max-age=31536000'
     else:
-        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Cache-Control'] = 'no-cache, must-revalidate'
     
     return response
 

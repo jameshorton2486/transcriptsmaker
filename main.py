@@ -37,7 +37,7 @@ if __name__ == "__main__":
         config_info = {
             'ENVIRONMENT': os.environ.get('FLASK_ENV', 'production'),
             'DEBUG_MODE': os.environ.get('FLASK_DEBUG', 'False').lower() == 'true',
-            'SERVER_PORT': 5000
+            'SERVER_PORT': 5000  # Updated to use port 5000
         }
         for key, value in config_info.items():
             logger.info(f"  {key}: {value}")
@@ -46,9 +46,9 @@ if __name__ == "__main__":
         logger.info("Starting Legal Transcription System...")
         app.run(
             host="0.0.0.0",
-            port=5000,
-            debug=False,  # Disable debug mode for stability
-            use_reloader=False  # Disable reloader to prevent port conflicts
+            port=5000,  # Updated to use port 5000
+            debug=False,  # Keep debug mode disabled for production
+            use_reloader=False  # Prevent duplicate processes
         )
     except Exception as e:
         logger.error(f"Failed to start server: {str(e)}")
