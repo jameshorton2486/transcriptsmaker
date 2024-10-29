@@ -1,6 +1,6 @@
 import os
 import logging
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
 from werkzeug.utils import secure_filename
@@ -20,7 +20,7 @@ class Base(DeclarativeBase):
     pass
 
 db = SQLAlchemy(model_class=Base)
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static', static_folder='static')
 
 # Configuration
 app.secret_key = os.urandom(24)
@@ -40,12 +40,30 @@ app.config['ALLOWED_EXTENSIONS'] = {'wav', 'mp3', 'flac', 'mp4'}
 # Processing timeouts
 app.config['PROCESSING_TIMEOUT'] = 300  # 5 minutes
 
+# MIME types for static files
+app.config['MIME_TYPES'] = {
+    '.js': 'application/javascript',
+    '.css': 'text/css',
+    '.html': 'text/html',
+    '.ico': 'image/x-icon'
+}
+
 # Initialize extensions
 db.init_app(app)
 
 # Create upload folder if it doesn't exist
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 logger.info(f"Upload folder created at {app.config['UPLOAD_FOLDER']}")
+
+# Serve static files with proper MIME types
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    mimetype = None
+    for ext, mime in app.config['MIME_TYPES'].items():
+        if filename.endswith(ext):
+            mimetype = mime
+            break
+    return send_from_directory(app.static_folder, filename, mimetype=mimetype)
 
 # Import routes after app initialization
 from routes import *
@@ -68,9 +86,9 @@ def request_entity_too_large(error):
 
 @app.errorhandler(404)
 def not_found_error(error):
-    return jsonify({'error': 'Resource not found'}), 404, {'Content-Type': 'application/json'}
+    return render_template('404.html'), 404, {'Content-Type': 'text/html'}
 
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
-    return jsonify({'error': 'Internal server error'}), 500, {'Content-Type': 'application/json'}
+    return render_template('500.html'), 500, {'Content-Type': 'text/html'}
