@@ -44,7 +44,11 @@ class AudioProcessor {
             const file = fileInput.files[0];
             
             if (!file) {
-                this.showError('No audio file was uploaded. Please select an audio file to continue.', 'VALIDATION_ERROR');
+                // Force show error modal for no file selected
+                this.showError(
+                    'No audio file was uploaded. Please select an audio file to continue.',
+                    'VALIDATION_ERROR'
+                );
                 return;
             }
 
@@ -113,49 +117,46 @@ class AudioProcessor {
     showError(message, errorType = 'UNKNOWN_ERROR') {
         console.log('Showing error modal:', { type: errorType, message: message });
         
-        try {
-            // Update modal content
-            const modalTitle = document.getElementById('errorModalLabel');
-            const modalBody = document.getElementById('errorModalBody');
-            
-            if (!modalTitle || !modalBody) {
-                console.error('Modal elements not found');
-                return;
-            }
-            
-            modalTitle.textContent = this.getErrorTypeTitle(errorType);
-            
-            modalBody.innerHTML = `
-                <div class="d-flex align-items-center mb-3">
-                    <i class="bi bi-exclamation-triangle-fill text-light fs-4 me-2"></i>
-                    <strong class="text-light">${errorType}</strong>
-                </div>
-                <p class="mb-0 text-light fw-medium">${message}</p>
-            `;
+        // Get modal elements
+        const modalElement = document.getElementById('errorModal');
+        if (!modalElement) {
+            console.error('Error modal element not found');
+            return;
+        }
+        
+        // Initialize modal if needed
+        if (!this.errorModal) {
+            this.errorModal = new bootstrap.Modal(modalElement);
+        }
+        
+        // Update modal content
+        const modalTitle = document.getElementById('errorModalLabel');
+        const modalBody = document.getElementById('errorModalBody');
+        
+        modalTitle.textContent = this.getErrorTypeTitle(errorType);
+        modalBody.innerHTML = `
+            <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-exclamation-triangle-fill text-light fs-4 me-2"></i>
+                <strong class="text-light">${errorType}</strong>
+            </div>
+            <p class="mb-0 text-light fw-medium">${message}</p>
+        `;
+        
+        // Show modal
+        this.errorModal.show();
 
-            // Force show the modal
-            if (this.errorModal) {
-                this.errorModal.show();
-                console.log('Error modal shown successfully');
-            } else {
-                console.error('Error modal not properly initialized');
-            }
-
-            // Also update the transcription output area with an error indicator
-            const output = document.getElementById('transcriptionOutput');
-            if (output) {
-                output.innerHTML = `
-                    <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
-                        <div class="d-flex align-items-center">
-                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            <strong>${errorType}:</strong> An error occurred. See error details in the modal.
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        // Also update the transcription output area with an error indicator
+        const output = document.getElementById('transcriptionOutput');
+        if (output) {
+            output.innerHTML = `
+                <div class="alert alert-danger alert-dismissible fade show mb-0" role="alert">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>${errorType}:</strong> An error occurred. See error details in the modal.
                     </div>
-                `;
-            }
-        } catch (error) {
-            console.error('Error showing modal:', error);
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
         }
     }
 
@@ -176,7 +177,55 @@ class AudioProcessor {
         }
     }
 
-    // ... rest of the class implementation remains the same ...
+    updateTranscriptionOutput(data) {
+        const output = document.getElementById('transcriptionOutput');
+        if (!output) {
+            console.error('Transcription output element not found');
+            return;
+        }
+
+        // Clear any existing error messages
+        output.querySelectorAll('.alert').forEach(alert => alert.remove());
+
+        if (data.error) {
+            this.showError(data.error, data.error_code || 'API_ERROR');
+            return;
+        }
+        
+        let html = '<div class="transcription-content">';
+        if (data.speakers && data.speakers.length > 0) {
+            data.speakers.forEach(speaker => {
+                html += `
+                    <div class="mb-3 p-2 border-start border-primary border-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="text-primary">Speaker ${speaker.id}</strong>
+                            <span class="text-muted small">${this.formatTime(speaker.start_time)}</span>
+                        </div>
+                        <p class="mb-1">${speaker.text}</p>
+                    </div>`;
+            });
+        } else {
+            html += `<p>${data.text || 'No transcription available'}</p>`;
+        }
+        
+        if (data.confidence) {
+            html += `
+                <div class="mt-3 text-muted">
+                    <small>Confidence Score: ${(data.confidence * 100).toFixed(1)}%</small>
+                </div>`;
+        }
+        
+        html += '</div>';
+        output.innerHTML = html;
+    }
+
+    formatTime(seconds) {
+        const date = new Date(seconds * 1000);
+        const minutes = date.getUTCMinutes();
+        const secs = date.getUTCSeconds();
+        const ms = date.getUTCMilliseconds();
+        return `${minutes}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(3, '0')}`;
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

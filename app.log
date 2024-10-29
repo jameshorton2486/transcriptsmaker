@@ -541,3 +541,164 @@
 2024-10-29 19:23:01,452 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 19:23:01] "GET / HTTP/1.1" 200 -
 2024-10-29 19:23:01,502 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 19:23:01] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 19:23:01,582 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 19:23:01] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 19:27:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:32:59 UTC)" (scheduled at 2024-10-29 19:27:59.190704+00:00)
+2024-10-29 19:27:59,192 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20564233588701722, "memory_mb": 132.25, "open_files": 4, "threads": 25}
+2024-10-29 19:27:59,196 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:32:59 UTC)" executed successfully
+2024-10-29 19:28:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:33:01 UTC)" (scheduled at 2024-10-29 19:28:01.365000+00:00)
+2024-10-29 19:28:01,367 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.2079929852250452, "memory_mb": 133.76171875, "open_files": 4, "threads": 26}
+2024-10-29 19:28:01,367 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:33:01 UTC)" executed successfully
+2024-10-29 19:32:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:37:59 UTC)" (scheduled at 2024-10-29 19:32:59.190704+00:00)
+2024-10-29 19:32:59,195 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20564233588701722, "memory_mb": 132.25, "open_files": 4, "threads": 25}
+2024-10-29 19:32:59,197 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:37:59 UTC)" executed successfully
+2024-10-29 19:33:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:38:01 UTC)" (scheduled at 2024-10-29 19:33:01.365000+00:00)
+2024-10-29 19:33:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20818735416255657, "memory_mb": 133.88671875, "open_files": 4, "threads": 26}
+2024-10-29 19:33:01,367 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:38:01 UTC)" executed successfully
+2024-10-29 19:37:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:42:59 UTC)" (scheduled at 2024-10-29 19:37:59.190704+00:00)
+2024-10-29 19:37:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20564233588701722, "memory_mb": 132.25, "open_files": 4, "threads": 25}
+2024-10-29 19:37:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:42:59 UTC)" executed successfully
+2024-10-29 19:38:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:43:01 UTC)" (scheduled at 2024-10-29 19:38:01.365000+00:00)
+2024-10-29 19:38:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20818735416255657, "memory_mb": 133.88671875, "open_files": 4, "threads": 26}
+2024-10-29 19:38:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:43:01 UTC)" executed successfully
+2024-10-29 19:42:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:47:59 UTC)" (scheduled at 2024-10-29 19:42:59.190704+00:00)
+2024-10-29 19:42:59,192 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20564233588701722, "memory_mb": 132.25, "open_files": 4, "threads": 25}
+2024-10-29 19:42:59,194 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:47:59 UTC)" executed successfully
+2024-10-29 19:43:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:48:01 UTC)" (scheduled at 2024-10-29 19:43:01.365000+00:00)
+2024-10-29 19:43:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20818735416255657, "memory_mb": 133.88671875, "open_files": 4, "threads": 26}
+2024-10-29 19:43:01,367 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:48:01 UTC)" executed successfully
+2024-10-29 19:47:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:52:59 UTC)" (scheduled at 2024-10-29 19:47:59.190704+00:00)
+2024-10-29 19:47:59,195 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 19:47:59,198 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:52:59 UTC)" executed successfully
+2024-10-29 19:48:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:53:01 UTC)" (scheduled at 2024-10-29 19:48:01.365000+00:00)
+2024-10-29 19:48:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 19:48:01,367 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:53:01 UTC)" executed successfully
+2024-10-29 19:52:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:57:59 UTC)" (scheduled at 2024-10-29 19:52:59.190704+00:00)
+2024-10-29 19:52:59,195 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 19:52:59,197 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:57:59 UTC)" executed successfully
+2024-10-29 19:53:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:58:01 UTC)" (scheduled at 2024-10-29 19:53:01.365000+00:00)
+2024-10-29 19:53:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 19:53:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 19:58:01 UTC)" executed successfully
+2024-10-29 19:57:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:02:59 UTC)" (scheduled at 2024-10-29 19:57:59.190704+00:00)
+2024-10-29 19:57:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 19:57:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:02:59 UTC)" executed successfully
+2024-10-29 19:58:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:03:01 UTC)" (scheduled at 2024-10-29 19:58:01.365000+00:00)
+2024-10-29 19:58:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 19:58:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:03:01 UTC)" executed successfully
+2024-10-29 20:02:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:07:59 UTC)" (scheduled at 2024-10-29 20:02:59.190704+00:00)
+2024-10-29 20:02:59,195 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:02:59,197 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:07:59 UTC)" executed successfully
+2024-10-29 20:03:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:08:01 UTC)" (scheduled at 2024-10-29 20:03:01.365000+00:00)
+2024-10-29 20:03:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:03:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:08:01 UTC)" executed successfully
+2024-10-29 20:07:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:12:59 UTC)" (scheduled at 2024-10-29 20:07:59.190704+00:00)
+2024-10-29 20:07:59,192 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:07:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:12:59 UTC)" executed successfully
+2024-10-29 20:08:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:13:01 UTC)" (scheduled at 2024-10-29 20:08:01.365000+00:00)
+2024-10-29 20:08:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:08:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:13:01 UTC)" executed successfully
+2024-10-29 20:12:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:17:59 UTC)" (scheduled at 2024-10-29 20:12:59.190704+00:00)
+2024-10-29 20:12:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:12:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:17:59 UTC)" executed successfully
+2024-10-29 20:13:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:18:01 UTC)" (scheduled at 2024-10-29 20:13:01.365000+00:00)
+2024-10-29 20:13:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:13:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:18:01 UTC)" executed successfully
+2024-10-29 20:17:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:22:59 UTC)" (scheduled at 2024-10-29 20:17:59.190704+00:00)
+2024-10-29 20:17:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:17:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:22:59 UTC)" executed successfully
+2024-10-29 20:18:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:23:01 UTC)" (scheduled at 2024-10-29 20:18:01.365000+00:00)
+2024-10-29 20:18:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:18:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:23:01 UTC)" executed successfully
+2024-10-29 20:22:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:27:59 UTC)" (scheduled at 2024-10-29 20:22:59.190704+00:00)
+2024-10-29 20:22:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:22:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:27:59 UTC)" executed successfully
+2024-10-29 20:23:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:28:01 UTC)" (scheduled at 2024-10-29 20:23:01.365000+00:00)
+2024-10-29 20:23:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:23:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:28:01 UTC)" executed successfully
+2024-10-29 20:27:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:32:59 UTC)" (scheduled at 2024-10-29 20:27:59.190704+00:00)
+2024-10-29 20:27:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:27:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:32:59 UTC)" executed successfully
+2024-10-29 20:28:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:33:01 UTC)" (scheduled at 2024-10-29 20:28:01.365000+00:00)
+2024-10-29 20:28:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:28:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:33:01 UTC)" executed successfully
+2024-10-29 20:32:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:37:59 UTC)" (scheduled at 2024-10-29 20:32:59.190704+00:00)
+2024-10-29 20:32:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:32:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:37:59 UTC)" executed successfully
+2024-10-29 20:33:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:38:01 UTC)" (scheduled at 2024-10-29 20:33:01.365000+00:00)
+2024-10-29 20:33:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:33:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:38:01 UTC)" executed successfully
+2024-10-29 20:37:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:42:59 UTC)" (scheduled at 2024-10-29 20:37:59.190704+00:00)
+2024-10-29 20:37:59,195 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:37:59,195 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:42:59 UTC)" executed successfully
+2024-10-29 20:38:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:43:01 UTC)" (scheduled at 2024-10-29 20:38:01.365000+00:00)
+2024-10-29 20:38:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:38:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:43:01 UTC)" executed successfully
+2024-10-29 20:42:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:47:59 UTC)" (scheduled at 2024-10-29 20:42:59.190704+00:00)
+2024-10-29 20:42:59,195 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:42:59,199 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:47:59 UTC)" executed successfully
+2024-10-29 20:43:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:48:01 UTC)" (scheduled at 2024-10-29 20:43:01.365000+00:00)
+2024-10-29 20:43:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:43:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:48:01 UTC)" executed successfully
+2024-10-29 20:47:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:52:59 UTC)" (scheduled at 2024-10-29 20:47:59.190704+00:00)
+2024-10-29 20:47:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:47:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:52:59 UTC)" executed successfully
+2024-10-29 20:48:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:53:01 UTC)" (scheduled at 2024-10-29 20:48:01.365000+00:00)
+2024-10-29 20:48:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:48:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:53:01 UTC)" executed successfully
+2024-10-29 20:52:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:57:59 UTC)" (scheduled at 2024-10-29 20:52:59.190704+00:00)
+2024-10-29 20:52:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:52:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:57:59 UTC)" executed successfully
+2024-10-29 20:53:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:58:01 UTC)" (scheduled at 2024-10-29 20:53:01.365000+00:00)
+2024-10-29 20:53:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:53:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 20:58:01 UTC)" executed successfully
+2024-10-29 20:57:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:02:59 UTC)" (scheduled at 2024-10-29 20:57:59.190704+00:00)
+2024-10-29 20:57:59,192 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 20:57:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:02:59 UTC)" executed successfully
+2024-10-29 20:58:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:03:01 UTC)" (scheduled at 2024-10-29 20:58:01.365000+00:00)
+2024-10-29 20:58:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 20:58:01,367 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:03:01 UTC)" executed successfully
+2024-10-29 21:02:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:07:59 UTC)" (scheduled at 2024-10-29 21:02:59.190704+00:00)
+2024-10-29 21:02:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 21:02:59,192 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:07:59 UTC)" executed successfully
+2024-10-29 21:03:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:08:01 UTC)" (scheduled at 2024-10-29 21:03:01.365000+00:00)
+2024-10-29 21:03:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 21:03:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:08:01 UTC)" executed successfully
+2024-10-29 21:07:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:12:59 UTC)" (scheduled at 2024-10-29 21:07:59.190704+00:00)
+2024-10-29 21:07:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 21:07:59,196 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:12:59 UTC)" executed successfully
+2024-10-29 21:08:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:13:01 UTC)" (scheduled at 2024-10-29 21:08:01.365000+00:00)
+2024-10-29 21:08:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 21:08:01,366 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:13:01 UTC)" executed successfully
+2024-10-29 21:12:59,191 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:17:59 UTC)" (scheduled at 2024-10-29 21:12:59.190704+00:00)
+2024-10-29 21:12:59,191 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16171495600945024, "memory_mb": 104.0, "open_files": 4, "threads": 25}
+2024-10-29 21:12:59,193 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:17:59 UTC)" executed successfully
+2024-10-29 21:13:01,365 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:18:01 UTC)" (scheduled at 2024-10-29 21:13:01.365000+00:00)
+2024-10-29 21:13:01,366 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.16348249853494415, "memory_mb": 105.13671875, "open_files": 4, "threads": 26}
+2024-10-29 21:13:01,367 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 21:18:01 UTC)" executed successfully
+2024-10-29 21:16:56,124 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 21:16:59,453 - routes - [INFO] - Database tables created successfully
+2024-10-29 21:16:59,453 - error_handling.handlers - [INFO] - Completed Database initialization in 1.10 seconds
+2024-10-29 21:16:59,742 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 21:16:59,743 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 21:16:59,825 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 21:16:59,826 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 21:16:59,826 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 21:16:59,826 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 21:16:59,850 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.5:5000
+2024-10-29 21:16:59,850 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 21:16:59,852 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 21:17:00,459 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 21:17:01,512 - routes - [INFO] - Database tables created successfully
+2024-10-29 21:17:01,512 - error_handling.handlers - [INFO] - Completed Database initialization in 0.55 seconds
+2024-10-29 21:17:01,774 - transcription.deepgram_client - [INFO] - Deepgram API key validation successful
+2024-10-29 21:17:01,775 - routes - [INFO] - Deepgram API key validation successful
+2024-10-29 21:17:01,818 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 21:17:01,819 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 21:17:01,819 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 21:17:01,819 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 21:17:01,829 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 21:17:01,830 - werkzeug - [INFO] -  * Debugger PIN: 293-898-828
+2024-10-29 21:19:45,334 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:19:45] "GET / HTTP/1.1" 200 -
+2024-10-29 21:19:45,352 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:19:45] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 21:19:45,468 - werkzeug - [INFO] - 172.31.196.5 - - [29/Oct/2024 21:19:45] "GET /static/js/streaming.js HTTP/1.1" 200 -
