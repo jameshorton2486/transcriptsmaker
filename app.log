@@ -209,3 +209,116 @@
 2024-10-29 17:59:45,388 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:59:45] "GET / HTTP/1.1" 200 -
 2024-10-29 17:59:45,403 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:59:45] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
 2024-10-29 17:59:45,419 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 17:59:45] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 18:03:17,038 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:03:17] "GET / HTTP/1.1" 200 -
+2024-10-29 18:03:17,372 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:03:17] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 18:03:17,451 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:03:17] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 18:04:37,003 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:09:37 UTC)" (scheduled at 2024-10-29 18:04:37.002509+00:00)
+2024-10-29 18:04:37,004 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20649877401792663, "memory_mb": 132.80078125, "open_files": 4, "threads": 25}
+2024-10-29 18:04:37,004 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:09:37 UTC)" executed successfully
+2024-10-29 18:04:38,577 - apscheduler.executors.default - [INFO] - Running job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:09:38 UTC)" (scheduled at 2024-10-29 18:04:38.576687+00:00)
+2024-10-29 18:04:38,578 - performance - [INFO] - Resource usage: {"cpu_percent": 0.0, "memory_percent": 0.20856394397898484, "memory_mb": 134.12890625, "open_files": 4, "threads": 26}
+2024-10-29 18:04:38,578 - apscheduler.executors.default - [INFO] - Job "start_monitoring.<locals>.monitor (trigger: interval[0:05:00], next run at: 2024-10-29 18:09:38 UTC)" executed successfully
+2024-10-29 18:06:03,177 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:06:03] "[35m[1mPOST /api/transcribe HTTP/1.1[0m" 500 -
+2024-10-29 18:07:03,929 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:07:06,258 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:07:06,259 - error_handling.handlers - [INFO] - Completed Database initialization in 1.02 seconds
+2024-10-29 18:07:06,314 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:07:06,316 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:07:06,316 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:07:06,316 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:07:06,338 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 18:07:06,338 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 18:07:06,340 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 18:07:06,761 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:07:07,833 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:07:07,834 - error_handling.handlers - [INFO] - Completed Database initialization in 0.43 seconds
+2024-10-29 18:07:07,865 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:07:07,865 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:07:07,866 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:07:07,866 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:07:07,876 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 18:07:07,879 - werkzeug - [INFO] -  * Debugger PIN: 721-235-693
+2024-10-29 18:07:07,923 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:07] "GET / HTTP/1.1" 200 -
+2024-10-29 18:07:08,001 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:08] "[36mGET /static/js/audio_processor.js HTTP/1.1[0m" 304 -
+2024-10-29 18:07:08,041 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:08] "[36mGET /static/js/streaming.js HTTP/1.1[0m" 304 -
+2024-10-29 18:07:14,941 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:07:16,139 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:07:16,140 - error_handling.handlers - [INFO] - Completed Database initialization in 0.48 seconds
+2024-10-29 18:07:16,172 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:07:16,173 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:07:16,173 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:07:16,174 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:07:16,188 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 18:07:16,188 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 18:07:16,189 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 18:07:16,584 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:07:17,738 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:07:17,738 - error_handling.handlers - [INFO] - Completed Database initialization in 0.44 seconds
+2024-10-29 18:07:17,773 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:07:17,774 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:07:17,774 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:07:17,777 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:07:17,786 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 18:07:17,788 - werkzeug - [INFO] -  * Debugger PIN: 146-144-844
+2024-10-29 18:07:17,835 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:17] "GET / HTTP/1.1" 200 -
+2024-10-29 18:07:17,905 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:17] "[36mGET /static/js/audio_processor.js HTTP/1.1[0m" 304 -
+2024-10-29 18:07:17,943 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:17] "[36mGET /static/js/streaming.js HTTP/1.1[0m" 304 -
+2024-10-29 18:07:27,769 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:07:29,480 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:07:29,480 - error_handling.handlers - [INFO] - Completed Database initialization in 0.42 seconds
+2024-10-29 18:07:29,528 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:07:29,529 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:07:29,529 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:07:29,529 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:07:29,548 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 18:07:29,548 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 18:07:29,549 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 18:07:29,964 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:07:31,029 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:07:31,029 - error_handling.handlers - [INFO] - Completed Database initialization in 0.44 seconds
+2024-10-29 18:07:31,059 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:07:31,059 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:07:31,060 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:07:31,060 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:07:31,069 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 18:07:31,071 - werkzeug - [INFO] -  * Debugger PIN: 120-157-383
+2024-10-29 18:07:31,115 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:31] "GET / HTTP/1.1" 200 -
+2024-10-29 18:07:31,196 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:31] "[36mGET /static/js/audio_processor.js HTTP/1.1[0m" 304 -
+2024-10-29 18:07:31,244 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:07:31] "[36mGET /static/js/streaming.js HTTP/1.1[0m" 304 -
+2024-10-29 18:08:20,781 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:08:22,778 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:08:22,781 - error_handling.handlers - [INFO] - Completed Database initialization in 0.44 seconds
+2024-10-29 18:08:22,899 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:08:22,899 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:08:22,900 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:08:22,900 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:08:22,954 - werkzeug - [INFO] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-29 18:08:22,955 - werkzeug - [INFO] - [33mPress CTRL+C to quit[0m
+2024-10-29 18:08:22,959 - werkzeug - [INFO] -  * Restarting with stat
+2024-10-29 18:08:23,475 - root - [INFO] - Upload folder created at /tmp/uploads
+2024-10-29 18:08:24,669 - routes - [INFO] - Database tables created successfully
+2024-10-29 18:08:24,670 - error_handling.handlers - [INFO] - Completed Database initialization in 0.43 seconds
+2024-10-29 18:08:24,701 - apscheduler.scheduler - [INFO] - Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2024-10-29 18:08:24,701 - apscheduler.scheduler - [INFO] - Added job "start_monitoring.<locals>.monitor" to job store "default"
+2024-10-29 18:08:24,702 - apscheduler.scheduler - [INFO] - Scheduler started
+2024-10-29 18:08:24,702 - __main__ - [INFO] - Starting Legal Transcription System
+2024-10-29 18:08:24,712 - werkzeug - [WARNING] -  * Debugger is active!
+2024-10-29 18:08:24,714 - werkzeug - [INFO] -  * Debugger PIN: 496-127-751
+2024-10-29 18:08:24,766 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:24] "GET / HTTP/1.1" 200 -
+2024-10-29 18:08:24,767 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:24] "GET / HTTP/1.1" 200 -
+2024-10-29 18:08:24,789 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:24] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 18:08:24,959 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:24] "GET /static/js/streaming.js HTTP/1.1" 200 -
+2024-10-29 18:08:24,960 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:24] "GET /static/js/audio_processor.js HTTP/1.1" 200 -
+2024-10-29 18:08:25,047 - werkzeug - [INFO] - 172.31.196.186 - - [29/Oct/2024 18:08:25] "GET /static/js/streaming.js HTTP/1.1" 200 -

@@ -27,4 +27,6 @@ dependencies = [
     "apispec>=6.7.0",
     "marshmallow>=3.23.0",
     "apscheduler",
+    "asgiref>=3.8.1",
+    "aioflask>=0.4.0",
 ]

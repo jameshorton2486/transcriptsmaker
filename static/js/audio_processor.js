@@ -7,7 +7,7 @@ class AudioProcessor {
     initializeUploadForm() {
         const form = document.getElementById('uploadForm');
         if (!form) {
-            console.error('Upload form not found');
+            this.showError('Upload form not found', 'INIT_ERROR');
             return;
         }
 
@@ -17,7 +17,7 @@ class AudioProcessor {
             const file = fileInput.files[0];
             
             if (!file) {
-                alert('Please select a file');
+                this.showError('Please select a file', 'VALIDATION_ERROR');
                 return;
             }
 
@@ -35,20 +35,33 @@ class AudioProcessor {
                 });
 
                 const result = await response.json();
-                if (result.error) {
-                    throw new Error(result.error);
+                if (!response.ok) {
+                    throw new Error(result.message || 'Error processing file');
                 }
                 
                 this.updateTranscriptionOutput(result);
             } catch (error) {
                 console.error('Error:', error);
-                alert('Error processing file: ' + error.message);
+                this.showError(error.message || 'Error processing file', 'PROCESSING_ERROR');
             } finally {
                 const submitButton = form.querySelector('button[type="submit"]');
                 submitButton.disabled = false;
                 submitButton.textContent = 'Start Transcription';
             }
         });
+    }
+
+    showError(message, errorType = 'UNKNOWN_ERROR') {
+        const output = document.getElementById('transcriptionOutput');
+        if (!output) return;
+
+        const errorHtml = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>${errorType}:</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        output.innerHTML = errorHtml;
     }
 
     updateTranscriptionOutput(data) {
@@ -58,19 +71,42 @@ class AudioProcessor {
             return;
         }
 
+        // Clear any existing error messages
+        output.querySelectorAll('.alert').forEach(alert => alert.remove());
+
         let html = '';
         
+        if (data.error) {
+            this.showError(data.error, data.error_code || 'API_ERROR');
+            return;
+        }
+        
         if (data.speakers && data.speakers.length > 0) {
+            html = '<div class="transcription-content">';
             data.speakers.forEach(speaker => {
                 html += `
-                    <div class="mb-2">
-                        <strong class="text-primary">Speaker ${speaker.id}</strong>
-                        <span class="text-muted">(${this.formatTime(speaker.start_time)})</span>
+                    <div class="mb-3 p-2 border-start border-primary border-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <strong class="text-primary">Speaker ${speaker.id}</strong>
+                            <span class="text-muted small">${this.formatTime(speaker.start_time)}</span>
+                        </div>
                         <p class="mb-1">${speaker.text}</p>
                     </div>`;
             });
+            html += '</div>';
         } else {
-            html = `<p>${data.text || 'No transcription available'}</p>`;
+            html = `
+                <div class="transcription-content">
+                    <p>${data.text || 'No transcription available'}</p>
+                </div>`;
+        }
+        
+        // Add confidence score if available
+        if (data.confidence) {
+            html += `
+                <div class="mt-3 text-muted">
+                    <small>Confidence Score: ${(data.confidence * 100).toFixed(1)}%</small>
+                </div>`;
         }
         
         output.innerHTML = html;
