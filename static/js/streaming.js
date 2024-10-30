@@ -12,35 +12,7 @@ class StreamHandler {
         this.pingInterval = null;
 
         try {
-            const modalElement = document.getElementById('errorModal');
-            if (!modalElement) {
-                throw new Error('Error modal element not found');
-            }
-            
-            this.errorModal = new bootstrap.Modal(modalElement, {
-                backdrop: 'static',
-                keyboard: true
-            });
-
-            // Enhanced modal event listeners
-            modalElement.addEventListener('show.bs.modal', () => {
-                console.debug('Error modal is being shown');
-                document.body.classList.add('modal-open');
-            });
-
-            modalElement.addEventListener('hidden.bs.modal', () => {
-                console.debug('Error modal was hidden');
-                this.cleanupModal();
-            });
-
-            // Improved close button handling
-            const closeButtons = modalElement.querySelectorAll('[data-bs-dismiss="modal"]');
-            closeButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    this.hideModal();
-                });
-            });
-
+            this.initializeModal();
             this.initializeButtons();
             this.initialized = true;
             console.debug('StreamHandler initialized successfully');
@@ -49,6 +21,119 @@ class StreamHandler {
             this.handleInitializationError(error);
             throw error;
         }
+    }
+
+    initializeButtons() {
+        console.debug('Initializing streaming buttons...');
+        this.startButton = document.getElementById('startStreaming');
+        this.stopButton = document.getElementById('stopStreaming');
+
+        if (!this.startButton || !this.stopButton) {
+            throw new Error('Streaming buttons not found');
+        }
+
+        this.startButton.addEventListener('click', () => this.startStreaming());
+        this.stopButton.addEventListener('click', () => this.stopStreaming());
+    }
+
+    async startStreaming() {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            this.setupMediaRecorder(stream);
+            this.startButton.disabled = true;
+            this.stopButton.disabled = false;
+        } catch (error) {
+            this.showError('Failed to access microphone', 'MEDIA_ERROR', error.message);
+        }
+    }
+
+    setupMediaRecorder(stream) {
+        this.mediaRecorder = new MediaRecorder(stream);
+        this.mediaRecorder.addEventListener('dataavailable', (event) => {
+            this.audioChunks.push(event.data);
+        });
+
+        this.mediaRecorder.addEventListener('stop', () => {
+            const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+            this.uploadAudio(audioBlob);
+            this.audioChunks = [];
+        });
+
+        this.mediaRecorder.start(1000);
+        this.isRecording = true;
+    }
+
+    stopStreaming() {
+        if (this.mediaRecorder && this.isRecording) {
+            this.mediaRecorder.stop();
+            this.isRecording = false;
+            this.startButton.disabled = false;
+            this.stopButton.disabled = true;
+        }
+    }
+
+    async uploadAudio(blob) {
+        try {
+            const formData = new FormData();
+            formData.append('audio', blob, 'recording.wav');
+
+            const response = await fetch('/api/transcribe', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                throw new Error(result.error || 'Failed to upload recording');
+            }
+
+            document.getElementById('transcriptionOutput').innerHTML = 
+                `<div class="alert alert-success">Recording uploaded successfully. Transcription ID: ${result.id}</div>`;
+        } catch (error) {
+            this.showError(error.message, 'UPLOAD_ERROR');
+        }
+    }
+
+    initializeModal() {
+        console.debug('Initializing error modal...');
+        const modalElement = document.getElementById('errorModal');
+        if (!modalElement) {
+            throw new Error('Error modal element not found');
+        }
+        
+        this.errorModal = new bootstrap.Modal(modalElement, {
+            backdrop: 'static',
+            keyboard: true
+        });
+
+        modalElement.addEventListener('show.bs.modal', () => {
+            console.debug('Error modal is being shown');
+            document.body.classList.add('modal-open');
+        });
+
+        modalElement.addEventListener('hidden.bs.modal', () => {
+            console.debug('Error modal was hidden');
+            this.cleanupModal();
+        });
+
+        document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
+            button.addEventListener('click', () => {
+                this.hideModal();
+            });
+        });
+    }
+
+    handleInitializationError(error) {
+        console.error('Initialization error:', error);
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'alert alert-danger m-3';
+        errorContainer.innerHTML = `
+            <h4 class="alert-heading">Initialization Error</h4>
+            <p>${this.sanitizeErrorMessage(error.message)}</p>
+            <hr>
+            <p class="mb-0">Please refresh the page or contact support if the problem persists.</p>
+        `;
+        document.body.insertBefore(errorContainer, document.body.firstChild);
     }
 
     hideModal() {
@@ -138,12 +223,11 @@ class StreamHandler {
             'RECORDER_ERROR': 'Recording Error',
             'CONNECTION_ERROR': 'Connection Lost',
             'STREAMING_ERROR': 'Streaming Error',
+            'UPLOAD_ERROR': 'Upload Error',
             'INIT_ERROR': 'Initialization Error'
         };
         return errorTitles[errorType] || 'Error';
     }
-
-    // Rest of the StreamHandler implementation remains the same...
 }
 
 // Enhanced initialization
@@ -156,21 +240,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } catch (error) {
         console.error('Failed to initialize StreamHandler:', error);
-        const safeErrorMessage = error.message
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-            
-        const errorContainer = document.createElement('div');
-        errorContainer.className = 'alert alert-danger m-3';
-        errorContainer.innerHTML = `
-            <h4 class="alert-heading">Initialization Error</h4>
-            <p>${safeErrorMessage}</p>
-            <hr>
-            <p class="mb-0">Please refresh the page or contact support if the problem persists.</p>
-        `;
-        document.body.insertBefore(errorContainer, document.body.firstChild);
     }
 });

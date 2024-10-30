@@ -40,18 +40,7 @@ app.config.update(
     SESSION_COOKIE_SAMESITE='Lax',
     PERMANENT_SESSION_LIFETIME=1800,
     PREFERRED_URL_SCHEME='https',
-    SERVER_NAME=f"{os.environ.get('REPL_SLUG', 'legal-transcription')}.repl.co",
     APPLICATION_ROOT='/',
-    MIME_TYPES={
-        '.js': 'application/javascript',
-        '.css': 'text/css',
-        '.html': 'text/html',
-        '.png': 'image/png',
-        '.jpg': 'image/jpeg',
-        '.gif': 'image/gif',
-        '.svg': 'image/svg+xml',
-        '.ico': 'image/x-icon'
-    }
 )
 
 # Initialize extensions
@@ -62,9 +51,10 @@ db.init_app(app)
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 logger.info(f"Upload folder created at {app.config['UPLOAD_FOLDER']}")
 
-# Security headers and MIME type handling
+# Security headers
 @app.after_request
 def add_header(response):
+    # Add security headers
     response.headers.update({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -86,18 +76,18 @@ def add_header(response):
         'Permissions-Policy': 'microphone=self'
     })
     
-    # Handle static files
+    # Only set cache headers for static files
     if request.path.startswith('/static/'):
-        ext = os.path.splitext(request.path)[-1]
-        if ext in app.config['MIME_TYPES']:
-            response.mimetype = app.config['MIME_TYPES'][ext]
-            response.cache_control.max_age = 31536000
-            response.cache_control.public = True
-            response.headers['Vary'] = 'Accept-Encoding'
-            if ext in ['.css', '.js']:
-                response.headers['Content-Encoding'] = 'gzip'
+        response.cache_control.max_age = 31536000
+        response.cache_control.public = True
+        response.headers['Vary'] = 'Accept-Encoding'
     
     return response
+
+# Serve static files directly
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(app.static_folder, filename)
 
 # Error handlers
 @app.errorhandler(404)

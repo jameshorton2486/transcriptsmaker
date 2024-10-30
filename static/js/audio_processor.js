@@ -42,19 +42,86 @@ class AudioProcessor {
             this.cleanupModal();
         });
 
-        // Enhanced close button handling
         document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
             button.addEventListener('click', () => {
                 this.hideModal();
             });
         });
 
-        // Handle escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && this.errorModal._isShown) {
                 this.hideModal();
             }
         });
+    }
+
+    initializeUploadForm() {
+        console.debug('Initializing upload form...');
+        const form = document.getElementById('uploadForm');
+        const fileInput = document.getElementById('audioFile');
+        
+        if (!form || !fileInput) {
+            throw new Error('Upload form elements not found');
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const spinner = form.querySelector('.spinner-border');
+            const submitButton = form.querySelector('button[type="submit"]');
+
+            if (!fileInput.files.length) {
+                this.showError('Please select a file to upload', 'VALIDATION_ERROR');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const extension = file.name.split('.').pop().toLowerCase();
+
+            if (!this.allowedFormats.includes(extension)) {
+                this.showError(`Unsupported file format: ${extension}`, 'FORMAT_ERROR');
+                return;
+            }
+
+            try {
+                spinner.classList.remove('d-none');
+                submitButton.disabled = true;
+
+                const formData = new FormData();
+                formData.append('audio', file);
+
+                const response = await fetch('/api/transcribe', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Failed to upload file');
+                }
+
+                document.getElementById('transcriptionOutput').innerHTML = 
+                    `<div class="alert alert-success">File uploaded successfully. Transcription ID: ${result.id}</div>`;
+            } catch (error) {
+                this.showError(error.message, 'UPLOAD_ERROR');
+            } finally {
+                spinner.classList.add('d-none');
+                submitButton.disabled = false;
+            }
+        });
+    }
+
+    handleInitializationError(error) {
+        console.error('Initialization error:', error);
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'alert alert-danger m-3';
+        errorContainer.innerHTML = `
+            <h4 class="alert-heading">Initialization Error</h4>
+            <p>${this.sanitizeErrorMessage(error.message)}</p>
+            <hr>
+            <p class="mb-0">Please refresh the page or contact support if the problem persists.</p>
+        `;
+        document.body.insertBefore(errorContainer, document.body.firstChild);
     }
 
     hideModal() {
@@ -143,6 +210,7 @@ class AudioProcessor {
             'FORMAT_ERROR': 'File Format Error',
             'SIZE_ERROR': 'File Size Error',
             'PROCESSING_ERROR': 'Processing Error',
+            'UPLOAD_ERROR': 'Upload Error',
             'INIT_ERROR': 'Initialization Error',
             'UNKNOWN_ERROR': 'Error'
         };
@@ -160,21 +228,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     } catch (error) {
         console.error('Failed to initialize AudioProcessor:', error);
-        const safeErrorMessage = error.message
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-            
-        const errorContainer = document.createElement('div');
-        errorContainer.className = 'alert alert-danger m-3';
-        errorContainer.innerHTML = `
-            <h4 class="alert-heading">Initialization Error</h4>
-            <p>${safeErrorMessage}</p>
-            <hr>
-            <p class="mb-0">Please refresh the page or contact support if the problem persists.</p>
-        `;
-        document.body.insertBefore(errorContainer, document.body.firstChild);
     }
 });
