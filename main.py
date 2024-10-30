@@ -33,11 +33,15 @@ if __name__ == "__main__":
         signal.signal(signal.SIGINT, cleanup)
         atexit.register(cleanup)
 
+        # Get port from environment or use default
+        port = int(os.environ.get('PORT', 5000))
+        
         # Log configuration
         config_info = {
             'ENVIRONMENT': os.environ.get('FLASK_ENV', 'production'),
             'DEBUG_MODE': os.environ.get('FLASK_DEBUG', 'False').lower() == 'true',
-            'SERVER_PORT': 5000  # Change to port 5000
+            'SERVER_PORT': port,
+            'SERVER_NAME': os.environ.get('REPL_SLUG', 'legal-transcription')
         }
         for key, value in config_info.items():
             logger.info(f"  {key}: {value}")
@@ -45,10 +49,11 @@ if __name__ == "__main__":
         # Start the application
         logger.info("Starting Legal Transcription System...")
         app.run(
-            host="0.0.0.0",  # Listen on all interfaces
-            port=5000,  # Change to port 5000
-            debug=False,  # Keep debug mode disabled for production
-            use_reloader=False  # Prevent duplicate processes
+            host="0.0.0.0",
+            port=port,
+            debug=False,
+            use_reloader=False,
+            threaded=True
         )
     except Exception as e:
         logger.error(f"Failed to start server: {str(e)}")

@@ -6,6 +6,7 @@ from monitoring import setup_logging, start_monitoring, log_request_metrics
 from error_handling.exceptions import TranscriptionError, ValidationError, APIError
 from error_handling.handlers import handle_errors, error_context, retry_on_error, log_errors
 from database import db
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Set up enhanced logging
 logger, perf_logger = setup_logging()
@@ -16,6 +17,9 @@ app = Flask(__name__,
     static_folder='static',
     template_folder='templates'
 )
+
+# Handle proxy headers from Replit
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configuration
 app.config.update(
@@ -32,9 +36,12 @@ app.config.update(
     ALLOWED_EXTENSIONS={'wav', 'mp3', 'flac', 'mp4'},
     PROCESSING_TIMEOUT=300,  # 5 minutes
     SEND_FILE_MAX_AGE_DEFAULT=31536000,  # Enable caching for static files
-    SESSION_COOKIE_HTTPONLY=True,  # Prevent JavaScript access to session cookie
-    SESSION_COOKIE_SAMESITE='Lax',  # Less strict SameSite policy for Replit
-    PERMANENT_SESSION_LIFETIME=1800,  # 30 minutes session lifetime
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+    PERMANENT_SESSION_LIFETIME=1800,
+    PREFERRED_URL_SCHEME='https',
+    SERVER_NAME=f"{os.environ.get('REPL_SLUG', 'legal-transcription')}.repl.co",
+    APPLICATION_ROOT='/',
     MIME_TYPES={
         '.js': 'application/javascript',
         '.css': 'text/css',
@@ -42,7 +49,8 @@ app.config.update(
         '.png': 'image/png',
         '.jpg': 'image/jpeg',
         '.gif': 'image/gif',
-        '.svg': 'image/svg+xml'
+        '.svg': 'image/svg+xml',
+        '.ico': 'image/x-icon'
     }
 )
 
@@ -57,7 +65,6 @@ logger.info(f"Upload folder created at {app.config['UPLOAD_FOLDER']}")
 # Security headers and MIME type handling
 @app.after_request
 def add_header(response):
-    # Update security headers for proper web exposure
     response.headers.update({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -71,7 +78,7 @@ def add_header(response):
             "style-src 'self' 'unsafe-inline' https:; "
             "img-src 'self' data: https:; "
             "font-src 'self' https:; "
-            "connect-src 'self' https: wss:; "  # Added wss: for WebSocket
+            "connect-src 'self' https: wss:; "
             "media-src 'self' https:; "
             "object-src 'none';"
         ),
@@ -81,13 +88,14 @@ def add_header(response):
     
     # Handle static files
     if request.path.startswith('/static/'):
-        response.cache_control.max_age = 31536000
-        response.cache_control.public = True
-        
-        # Set proper MIME types
         ext = os.path.splitext(request.path)[-1]
         if ext in app.config['MIME_TYPES']:
             response.mimetype = app.config['MIME_TYPES'][ext]
+            response.cache_control.max_age = 31536000
+            response.cache_control.public = True
+            response.headers['Vary'] = 'Accept-Encoding'
+            if ext in ['.css', '.js']:
+                response.headers['Content-Encoding'] = 'gzip'
     
     return response
 
