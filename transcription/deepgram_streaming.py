@@ -5,11 +5,9 @@ import json
 from typing import Optional, Dict, Any, Callable
 from datetime import datetime
 from deepgram import (
-    Deepgram,
     DeepgramClient,
-    LiveOptions,
-    LiveTranscriptionEvents,
-    Microphone
+    DeepgramClientOptions,
+    LiveOptions
 )
 
 logger = logging.getLogger(__name__)
@@ -22,7 +20,8 @@ class DeepgramStreamingClient:
         if not self.api_key:
             raise ValueError("Deepgram API key not found in environment variables")
             
-        self.client = DeepgramClient(self.api_key)
+        # Initialize Deepgram client without verbose logging option
+        self.client = DeepgramClient(api_key=self.api_key)
         self.active_connections = set()
         logger.info("Deepgram streaming client initialized")
 
@@ -50,79 +49,79 @@ class DeepgramStreamingClient:
                 diarize=True,
                 encoding="linear16",
                 channels=1,
-                sample_rate=16000
+                sample_rate=16000,
+                interim_results=True
             )
 
-            # Create live transcription connection
-            try:
-                connection = await self.client.listen.live.v("1").transcribe(options)
-                logger.info("Live transcription connection established")
+            # Create live transcription
+            live = self.client.listen.live.v("1")
+            connection = await live.start(options)
+            logger.info("Live transcription connection established")
 
-                @connection.on(LiveTranscriptionEvents.CONNECTED)
-                async def handle_connected():
-                    logger.info("Deepgram connection opened")
-
-                @connection.on(LiveTranscriptionEvents.DISCONNECTED)
-                async def handle_disconnected():
-                    logger.info("Deepgram connection closed")
-
-                @connection.on(LiveTranscriptionEvents.TRANSCRIPT_RECEIVED)
-                async def handle_transcript(transcript):
-                    try:
-                        if transcript and isinstance(transcript, dict):
-                            if 'channel' in transcript and 'alternatives' in transcript['channel']:
-                                alternative = transcript['channel']['alternatives'][0]
-                                response = {
-                                    'type': 'transcript',
-                                    'transcript': alternative.get('transcript', ''),
-                                    'confidence': alternative.get('confidence', 0),
-                                    'words': [
-                                        {
-                                            'word': word.get('word', ''),
-                                            'start': word.get('start', 0),
-                                            'end': word.get('end', 0),
-                                            'confidence': word.get('confidence', 0)
-                                        }
-                                        for word in alternative.get('words', [])
-                                    ]
-                                }
-                                await websocket.send(json.dumps(response))
-                                metrics['chunks_processed'] += 1
-                            elif 'error' in transcript:
-                                logger.error(f"Deepgram error: {transcript['error']}")
-                                metrics['errors'] += 1
-                                await websocket.send(json.dumps({
-                                    'type': 'error',
-                                    'error': transcript['error']
-                                }))
-                    except Exception as e:
-                        logger.error(f"Error processing transcript: {str(e)}")
-                        metrics['errors'] += 1
-
-                @connection.on(LiveTranscriptionEvents.ERROR)
-                async def handle_error(error):
-                    logger.error(f"Deepgram error: {str(error)}")
+            # Handle transcription events
+            @connection.on('transcript')
+            async def handle_transcript(transcript):
+                try:
+                    if transcript and isinstance(transcript, dict):
+                        if 'channel' in transcript and 'alternatives' in transcript['channel']:
+                            alternative = transcript['channel']['alternatives'][0]
+                            response = {
+                                'type': 'transcript',
+                                'is_final': transcript.get('is_final', True),
+                                'transcript': alternative.get('transcript', ''),
+                                'confidence': alternative.get('confidence', 0),
+                                'words': [
+                                    {
+                                        'word': word.get('word', ''),
+                                        'start': word.get('start', 0),
+                                        'end': word.get('end', 0),
+                                        'confidence': word.get('confidence', 0),
+                                        'speaker': word.get('speaker', None)
+                                    }
+                                    for word in alternative.get('words', [])
+                                ]
+                            }
+                            await websocket.send(json.dumps(response))
+                            metrics['chunks_processed'] += 1
+                        elif 'error' in transcript:
+                            logger.error(f"Deepgram error: {transcript['error']}")
+                            metrics['errors'] += 1
+                            await websocket.send(json.dumps({
+                                'type': 'error',
+                                'error': transcript['error']
+                            }))
+                except Exception as e:
+                    logger.error(f"Error processing transcript: {str(e)}")
                     metrics['errors'] += 1
-                    try:
-                        await websocket.send(json.dumps({
-                            'type': 'error',
-                            'error': str(error)
-                        }))
-                    except Exception as e:
-                        logger.error(f"Error sending error message: {str(e)}")
 
-                # Handle incoming audio data
-                while True:
-                    try:
-                        data = await websocket.receive_bytes()
-                        await connection.send(data)
-                    except Exception as e:
-                        logger.error(f"Error receiving/sending data: {str(e)}")
+            @connection.on('error')
+            async def handle_error(error):
+                logger.error(f"Deepgram error: {str(error)}")
+                metrics['errors'] += 1
+                try:
+                    await websocket.send(json.dumps({
+                        'type': 'error',
+                        'error': str(error)
+                    }))
+                except Exception as e:
+                    logger.error(f"Error sending error message: {str(e)}")
+
+            @connection.on('close')
+            async def handle_close():
+                logger.info("Deepgram connection closed")
+
+            # Handle incoming audio data
+            while True:
+                try:
+                    data = await websocket.receive_bytes()
+                    if not data:  # Empty data means connection closed
                         break
+                    await connection.send(data)
+                except Exception as e:
+                    logger.error(f"Error receiving/sending data: {str(e)}")
+                    break
 
-            except Exception as e:
-                logger.error(f"Error establishing live transcription connection: {str(e)}")
-                raise
+            await connection.finish()
 
         except Exception as e:
             logger.error(f"WebSocket error: {str(e)}")
