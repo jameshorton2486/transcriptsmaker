@@ -1451,3 +1451,18 @@ jinja2.exceptions.UndefinedError: 'super' is undefined
  * Running on http://172.31.196.186:5000
 2024-10-30 15:57:55,687 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
 2024-10-30 15:57:56,656 - werkzeug - [INFO] - [_internal:97] - 10.81.7.97 - - [30/Oct/2024 15:57:56] "[33mGET / HTTP/1.1[0m" 404 -
+2024-10-30 16:09:55,608 - root - [INFO] - [app:63] - Upload folder created at /tmp/uploads
+2024-10-30 16:09:55,613 - root - [INFO] - [main:27] - ============================================================
+2024-10-30 16:09:55,613 - root - [INFO] - [main:28] - Legal Transcription System v1.0.0
+2024-10-30 16:09:55,613 - root - [INFO] - [main:29] - ============================================================
+2024-10-30 16:09:55,613 - root - [INFO] - [main:47] -   ENVIRONMENT: production
+2024-10-30 16:09:55,613 - root - [INFO] - [main:47] -   DEBUG_MODE: False
+2024-10-30 16:09:55,614 - root - [INFO] - [main:47] -   SERVER_PORT: 5000
+2024-10-30 16:09:55,614 - root - [INFO] - [main:47] -   SERVER_NAME: workspace
+2024-10-30 16:09:55,614 - root - [INFO] - [main:50] - Starting Legal Transcription System...
+2024-10-30 16:09:55,626 - werkzeug - [INFO] - [_internal:97] - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.186:5000
+2024-10-30 16:09:55,627 - werkzeug - [INFO] - [_internal:97] - [33mPress CTRL+C to quit[0m
+2024-10-30 16:09:56,415 - werkzeug - [INFO] - [_internal:97] - 10.81.5.96 - - [30/Oct/2024 16:09:56] "[33mGET / HTTP/1.1[0m" 404 -

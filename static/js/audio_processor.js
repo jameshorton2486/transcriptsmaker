@@ -22,55 +22,63 @@ class AudioProcessor {
 
     initializeModal() {
         console.debug('Initializing error modal...');
-        const errorModalElement = document.getElementById('errorModal');
-        if (!errorModalElement) {
+        const modalElement = document.getElementById('errorModal');
+        if (!modalElement) {
             throw new Error('Error modal element not found');
         }
         
-        this.errorModal = new bootstrap.Modal(errorModalElement, {
+        this.errorModal = new bootstrap.Modal(modalElement, {
             backdrop: 'static',
-            keyboard: false
+            keyboard: true
         });
 
-        // Enhanced modal event listeners
-        errorModalElement.addEventListener('show.bs.modal', () => {
+        modalElement.addEventListener('show.bs.modal', () => {
             console.debug('Error modal is being shown');
+            document.body.classList.add('modal-open');
         });
 
-        errorModalElement.addEventListener('hidden.bs.modal', () => {
+        modalElement.addEventListener('hidden.bs.modal', () => {
             console.debug('Error modal was hidden');
             this.cleanupModal();
         });
 
-        // Improved close button handling
-        const closeButtons = errorModalElement.querySelectorAll('[data-bs-dismiss="modal"]');
-        closeButtons.forEach(button => {
+        // Enhanced close button handling
+        document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
             button.addEventListener('click', () => {
                 this.hideModal();
             });
         });
-    }
 
-    cleanupModal() {
-        console.debug('Cleaning up error modal content');
-        const modalBody = document.getElementById('errorModalBody');
-        if (modalBody) {
-            modalBody.innerHTML = '';
-        }
-        // Reset modal state
-        document.body.classList.remove('modal-open');
-        const backdrop = document.querySelector('.modal-backdrop');
-        if (backdrop) {
-            backdrop.remove();
-        }
+        // Handle escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.errorModal._isShown) {
+                this.hideModal();
+            }
+        });
     }
 
     hideModal() {
         if (this.errorModal) {
             console.debug('Hiding error modal');
             this.errorModal.hide();
-            // Ensure proper cleanup after hide animation
-            setTimeout(() => this.cleanupModal(), 300);
+            setTimeout(() => {
+                document.body.classList.remove('modal-open');
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) backdrop.remove();
+            }, 300);
+        }
+    }
+
+    cleanupModal() {
+        console.debug('Cleaning up error modal');
+        const modalBody = document.getElementById('errorModalBody');
+        if (modalBody) {
+            modalBody.innerHTML = '';
+        }
+        document.body.classList.remove('modal-open');
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
         }
     }
 
@@ -129,7 +137,17 @@ class AudioProcessor {
             .replace(/\)/g, '&#41;');
     }
 
-    // Rest of the class implementation remains the same...
+    getErrorTypeTitle(errorType) {
+        const errorTitles = {
+            'VALIDATION_ERROR': 'Validation Error',
+            'FORMAT_ERROR': 'File Format Error',
+            'SIZE_ERROR': 'File Size Error',
+            'PROCESSING_ERROR': 'Processing Error',
+            'INIT_ERROR': 'Initialization Error',
+            'UNKNOWN_ERROR': 'Error'
+        };
+        return errorTitles[errorType] || 'Error';
+    }
 }
 
 // Enhanced initialization

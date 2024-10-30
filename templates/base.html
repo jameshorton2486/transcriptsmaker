@@ -15,205 +15,51 @@
     <!-- Core Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer crossorigin="anonymous"></script>
     
-    <!-- Enhanced Error Boundary Script -->
+    <!-- Enhanced Error Handling Script -->
     <script>
-        class ErrorBoundary {
-            constructor() {
-                this.errors = [];
-                this.initialized = false;
-                this.maxErrors = 10;
-                this.modal = null;
-            }
-
-            init() {
-                if (this.initialized) {
-                    console.debug('Error boundary already initialized');
-                    return;
-                }
-                console.debug('Initializing error boundary handlers...');
-                this.setupErrorHandlers();
-                this.initializeModal();
-                this.initialized = true;
-                console.debug('Global error boundary initialized successfully');
-            }
-
-            initializeModal() {
-                const modalElement = document.getElementById('errorModal');
-                if (!modalElement) {
-                    console.error('Error modal element not found');
-                    return;
-                }
-
-                // Initialize Bootstrap modal with enhanced options
-                this.modal = new bootstrap.Modal(modalElement, {
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize error modal with enhanced options
+            const modalElement = document.getElementById('errorModal');
+            if (modalElement) {
+                const errorModal = new bootstrap.Modal(modalElement, {
                     backdrop: 'static',
-                    keyboard: false,
-                    focus: true
+                    keyboard: true
                 });
 
-                // Enhanced modal event listeners
-                modalElement.addEventListener('show.bs.modal', () => {
-                    console.debug('Error modal is being shown');
-                    document.body.classList.add('modal-open');
-                });
-
-                modalElement.addEventListener('shown.bs.modal', () => {
-                    console.debug('Error modal is now visible');
-                    const closeButton = modalElement.querySelector('.btn-close, .modal-footer .btn');
-                    if (closeButton) {
-                        closeButton.focus();
-                    }
-                });
-
-                modalElement.addEventListener('hide.bs.modal', () => {
-                    console.debug('Error modal is being hidden');
-                });
-
-                modalElement.addEventListener('hidden.bs.modal', () => {
-                    console.debug('Error modal was hidden');
-                    this.cleanupModal();
-                });
-
-                // Enhanced close button handling
-                const closeButtons = modalElement.querySelectorAll('[data-bs-dismiss="modal"]');
-                closeButtons.forEach(button => {
+                // Add proper event listeners
+                document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
                     button.addEventListener('click', () => {
-                        this.hideModal();
+                        errorModal.hide();
+                        setTimeout(() => {
+                            const modalElement = document.getElementById('errorModal');
+                            const backdrop = document.querySelector('.modal-backdrop');
+                            if (backdrop) backdrop.remove();
+                            document.body.classList.remove('modal-open');
+                            const modalBody = document.getElementById('errorModalBody');
+                            if (modalBody) modalBody.innerHTML = '';
+                        }, 300);
                     });
                 });
 
                 // Handle escape key
                 document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape' && this.modal._isShown) {
-                        this.hideModal();
+                    if (e.key === 'Escape' && modalElement.classList.contains('show')) {
+                        errorModal.hide();
                     }
                 });
-            }
 
-            cleanupModal() {
-                console.debug('Cleaning up error modal');
-                const modalBody = document.getElementById('errorModalBody');
-                if (modalBody) {
-                    modalBody.innerHTML = '';
-                }
-                document.body.classList.remove('modal-open');
-                const backdrop = document.querySelector('.modal-backdrop');
-                if (backdrop) {
-                    backdrop.remove();
-                }
-            }
-
-            hideModal() {
-                if (this.modal) {
-                    this.modal.hide();
-                    setTimeout(() => this.cleanupModal(), 300);
-                }
-            }
-
-            setupErrorHandlers() {
-                window.onerror = (msg, url, lineNo, columnNo, error) => {
-                    this.logError('runtime', {
-                        message: msg,
-                        url: url,
-                        lineNo: lineNo,
-                        columnNo: columnNo,
-                        error: error,
-                        stack: error?.stack
-                    });
-                    return false;
-                };
-
-                window.addEventListener('unhandledrejection', (event) => {
-                    this.logError('promise', {
-                        message: event.reason.message || event.reason,
-                        stack: event.reason.stack,
-                        type: event.reason.name || 'UnhandledRejection'
-                    });
+                modalElement.addEventListener('show.bs.modal', () => {
+                    document.body.classList.add('modal-open');
                 });
-            }
 
-            sanitizeHtml(unsafe) {
-                if (typeof unsafe !== 'string') {
-                    unsafe = String(unsafe);
-                }
-                return unsafe
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;')
-                    .replace(/`/g, '&#x60;')
-                    .replace(/\(/g, '&#40;')
-                    .replace(/\)/g, '&#41;');
-            }
-
-            logError(type, details) {
-                const error = {
-                    type: type,
-                    timestamp: new Date().toISOString(),
-                    details: details,
-                    url: window.location.href,
-                    userAgent: navigator.userAgent
-                };
-                
-                console.error(`[${error.type}] Error:`, error.details);
-                this.errors.push(error);
-
-                if (this.errors.length > this.maxErrors) {
-                    this.errors.shift();
-                }
-                
-                this.showErrorUI(error);
-
-                fetch('/api/log-error', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(error)
-                }).catch(console.error);
-            }
-
-            showErrorUI(error) {
-                if (this.modal) {
-                    const modalTitle = document.getElementById('errorModalLabel');
+                modalElement.addEventListener('hidden.bs.modal', () => {
+                    const backdrop = document.querySelector('.modal-backdrop');
+                    if (backdrop) backdrop.remove();
+                    document.body.classList.remove('modal-open');
                     const modalBody = document.getElementById('errorModalBody');
-                    
-                    if (modalTitle && modalBody) {
-                        modalTitle.textContent = this.getErrorTypeTitle(error.type);
-                        modalBody.innerHTML = this.createSafeErrorContent(error);
-                        this.modal.show();
-                    }
-                }
+                    if (modalBody) modalBody.innerHTML = '';
+                });
             }
-
-            createSafeErrorContent(error) {
-                return `
-                    <div class="d-flex align-items-center mb-3">
-                        <i class="bi bi-exclamation-triangle-fill text-light fs-4 me-2"></i>
-                        <strong class="text-light">${this.sanitizeHtml(error.type)}</strong>
-                    </div>
-                    <p class="mb-0 text-light fw-medium">${this.sanitizeHtml(error.details.message)}</p>
-                    ${error.details.stack ? `<pre class="mt-3 p-2 bg-dark text-light rounded"><code>${this.sanitizeHtml(error.details.stack)}</code></pre>` : ''}
-                `;
-            }
-
-            getErrorTypeTitle(type) {
-                const titles = {
-                    'runtime': 'Runtime Error',
-                    'promise': 'Promise Error',
-                    'network': 'Network Error',
-                    'api': 'API Error'
-                };
-                return titles[type] || 'Error';
-            }
-        }
-
-        // Initialize error boundary
-        window.AppErrors = new ErrorBoundary();
-        document.addEventListener('DOMContentLoaded', () => {
-            console.debug('DOM loaded, initializing error boundary...');
-            window.AppErrors.init();
         });
     </script>
 
@@ -246,7 +92,7 @@
     </div>
 
     <!-- Enhanced Error Modal -->
-    <div class="modal fade error-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal fade error-modal" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content bg-danger text-light">
                 <div class="modal-header border-0">
