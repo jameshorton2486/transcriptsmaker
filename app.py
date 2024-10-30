@@ -3,8 +3,9 @@ from flask_cors import CORS
 import os
 import logging
 import shutil
+import traceback  # Added missing import
 from datetime import datetime
-from logging.handlers import RotatingFileHandler
+from logging.handlers import RotatingFileHandler, TimedRotatingFileHandler  # Added TimedRotatingFileHandler
 from monitoring import setup_logging, start_monitoring, log_request_metrics
 from error_handling.exceptions import TranscriptionError, ValidationError, APIError
 from error_handling.handlers import handle_errors, error_context, retry_on_error, log_errors
@@ -25,18 +26,30 @@ def cleanup_logs():
 # Clean up logs before starting
 cleanup_logs()
 
-# Set up enhanced logging with more detailed formatting
+# Set up enhanced logging with more detailed formatting and time-based rotation
 log_formatter = logging.Formatter(
-    '%(asctime)s - [%(levelname)s] - %(name)s - %(module)s:%(lineno)d - %(message)s'
+    '%(asctime)s - [%(levelname)s] - %(name)s - %(module)s:%(lineno)d - %(message)s - %(pathname)s'
 )
 
-# Configure app logger
-app_handler = RotatingFileHandler('app.log', maxBytes=10*1024*1024, backupCount=5)
+# Configure app logger with time-based rotation
+app_handler = TimedRotatingFileHandler(
+    'app.log',
+    when='midnight',
+    interval=1,
+    backupCount=7,
+    encoding='utf-8'
+)
 app_handler.setFormatter(log_formatter)
 app_handler.setLevel(logging.DEBUG)
 
-# Configure error logger
-error_handler = RotatingFileHandler('error.log', maxBytes=10*1024*1024, backupCount=5)
+# Configure error logger with both size and time-based rotation
+error_handler = TimedRotatingFileHandler(
+    'error.log',
+    when='midnight',
+    interval=1,
+    backupCount=30,
+    encoding='utf-8'
+)
 error_handler.setFormatter(log_formatter)
 error_handler.setLevel(logging.ERROR)
 
@@ -61,7 +74,7 @@ app = Flask(__name__,
 # Handle proxy headers from Replit
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
-# Configuration
+# Configuration with enhanced error handling
 app.config.update(
     SECRET_KEY=os.urandom(24),
     SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL"),
@@ -85,7 +98,18 @@ app.config.update(
 
 # Initialize extensions
 CORS(app)
-db.init_app(app)
+
+# Verify database configuration before initialization
+if not app.config['SQLALCHEMY_DATABASE_URI']:
+    logger.error("Database URL not configured. Please check environment variables.")
+    raise ValueError("Database URL not configured")
+
+try:
+    db.init_app(app)
+    logger.info("Database initialization successful")
+except Exception as e:
+    logger.error(f"Database initialization failed: {str(e)}\n{traceback.format_exc()}")
+    raise
 
 # Create upload folder with proper permissions
 uploads_dir = app.config['UPLOAD_FOLDER']
@@ -95,7 +119,7 @@ os.makedirs(uploads_dir, exist_ok=True)
 os.chmod(uploads_dir, 0o755)
 logger.info(f"Upload folder created at {uploads_dir} with permissions 755")
 
-# Security headers
+# Enhanced security headers
 @app.after_request
 def add_header(response):
     request_info = {
@@ -107,20 +131,20 @@ def add_header(response):
     }
     logger.debug(f"Processing request: {request_info}")
     
-    # Add security headers
+    # Add security headers with enhanced CSP
     response.headers.update({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'SAMEORIGIN',
         'X-XSS-Protection': '1; mode=block',
         'Content-Security-Policy': (
             "default-src 'self' https:; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; "
-            "style-src 'self' 'unsafe-inline' https:; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https: cdn.jsdelivr.net cdn.replit.com; "
+            "style-src 'self' 'unsafe-inline' https: cdn.jsdelivr.net cdn.replit.com; "
             "img-src 'self' data: https:; "
-            "font-src 'self' https:; "
+            "font-src 'self' https: cdn.jsdelivr.net cdn.replit.com; "
             "connect-src 'self' https: wss:; "
             "media-src 'self' https:; "
             "object-src 'none';"
@@ -138,13 +162,18 @@ def add_header(response):
     logger.debug(f"Response headers set: {dict(response.headers)}")
     return response
 
-# Serve static files directly
+# Serve static files directly with enhanced error handling
 @app.route('/static/<path:filename>')
+@log_errors()
 def serve_static(filename):
     logger.debug(f"Serving static file: {filename}")
-    return send_from_directory(app.static_folder, filename)
+    try:
+        return send_from_directory(app.static_folder, filename)
+    except Exception as e:
+        logger.error(f"Error serving static file {filename}: {str(e)}")
+        raise
 
-# Error handlers
+# Enhanced error handlers
 @app.errorhandler(404)
 def not_found_error(error):
     error_context = {
@@ -152,7 +181,8 @@ def not_found_error(error):
         'method': request.method,
         'remote_addr': request.remote_addr,
         'user_agent': request.headers.get('User-Agent'),
-        'error': str(error)
+        'error': str(error),
+        'traceback': traceback.format_exc()
     }
     logger.error(f"404 Error: {error_context}")
     
@@ -168,7 +198,7 @@ def internal_error(error):
         'remote_addr': request.remote_addr,
         'user_agent': request.headers.get('User-Agent'),
         'error': str(error),
-        'stack_trace': ''.join(traceback.format_exc())
+        'traceback': traceback.format_exc()
     }
     logger.error(f"Internal server error: {error_context}")
     

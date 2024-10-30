@@ -3,18 +3,55 @@ class AudioProcessor {
         console.debug('Initializing AudioProcessor...');
         this.initialized = false;
         try {
+            // Check browser compatibility
             if (!window.AudioContext && !window.webkitAudioContext) {
                 throw new Error('AudioContext not supported in this browser');
             }
-            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Defer AudioContext creation until user interaction
+            this.audioContext = null;
             this.allowedFormats = ['wav', 'mp3', 'flac', 'mp4'];
             
-            this.initializeModal();
-            this.initializeUploadForm();
+            // Initialize modal with error handling
+            try {
+                this.initializeModal();
+            } catch (modalError) {
+                throw new Error(`Modal initialization failed: ${modalError.message}`);
+            }
+
+            // Initialize upload form with error handling
+            try {
+                this.initializeUploadForm();
+            } catch (formError) {
+                throw new Error(`Form initialization failed: ${formError.message}`);
+            }
+
             this.initialized = true;
             console.debug('AudioProcessor initialization completed successfully');
+            
+            // Add click listener to initialize AudioContext
+            document.addEventListener('click', () => {
+                if (!this.audioContext) {
+                    try {
+                        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        if (!this.audioContext) {
+                            throw new Error('Failed to create AudioContext');
+                        }
+                        console.debug('AudioContext initialized after user interaction');
+                        
+                        this.logEvent('audio_context', 'initialized', {
+                            sampleRate: this.audioContext.sampleRate
+                        });
+                    } catch (error) {
+                        console.error('Error initializing AudioContext:', error);
+                        this.logError('audio_context_error', error);
+                    }
+                }
+            }, { once: true });
+            
         } catch (error) {
             console.error('Error initializing AudioProcessor:', error);
+            this.logError('initialization_error', error);
             this.handleInitializationError(error);
             throw error;
         }
@@ -24,35 +61,39 @@ class AudioProcessor {
         console.debug('Initializing error modal...');
         const modalElement = document.getElementById('errorModal');
         if (!modalElement) {
-            throw new Error('Error modal element not found');
+            throw new Error('Error modal element not found in DOM');
         }
         
-        this.errorModal = new bootstrap.Modal(modalElement, {
-            backdrop: 'static',
-            keyboard: true
-        });
-
-        modalElement.addEventListener('show.bs.modal', () => {
-            console.debug('Error modal is being shown');
-            document.body.classList.add('modal-open');
-        });
-
-        modalElement.addEventListener('hidden.bs.modal', () => {
-            console.debug('Error modal was hidden');
-            this.cleanupModal();
-        });
-
-        document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
-            button.addEventListener('click', () => {
-                this.hideModal();
+        try {
+            this.errorModal = new bootstrap.Modal(modalElement, {
+                backdrop: 'static',
+                keyboard: true
             });
-        });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.errorModal._isShown) {
-                this.hideModal();
-            }
-        });
+            modalElement.addEventListener('show.bs.modal', () => {
+                console.debug('Error modal is being shown');
+                document.body.classList.add('modal-open');
+            });
+
+            modalElement.addEventListener('hidden.bs.modal', () => {
+                console.debug('Error modal was hidden');
+                this.cleanupModal();
+            });
+
+            document.querySelectorAll('[data-bs-dismiss="modal"]').forEach(button => {
+                button.addEventListener('click', () => {
+                    this.hideModal();
+                });
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.errorModal._isShown) {
+                    this.hideModal();
+                }
+            });
+        } catch (error) {
+            throw new Error(`Modal initialization failed: ${error.message}`);
+        }
     }
 
     initializeUploadForm() {
@@ -61,7 +102,7 @@ class AudioProcessor {
         const fileInput = document.getElementById('audioFile');
         
         if (!form || !fileInput) {
-            throw new Error('Upload form elements not found');
+            throw new Error('Upload form elements not found in DOM');
         }
 
         form.addEventListener('submit', async (e) => {
@@ -102,7 +143,14 @@ class AudioProcessor {
 
                 document.getElementById('transcriptionOutput').innerHTML = 
                     `<div class="alert alert-success">File uploaded successfully. Transcription ID: ${result.id}</div>`;
+                
+                this.logEvent('upload', 'success', {
+                    fileSize: file.size,
+                    fileType: file.type,
+                    transcriptionId: result.id
+                });
             } catch (error) {
+                this.logError('upload_error', error);
                 this.showError(error.message, 'UPLOAD_ERROR');
             } finally {
                 spinner.classList.add('d-none');
@@ -204,12 +252,60 @@ class AudioProcessor {
             .replace(/\)/g, '&#41;');
     }
 
+    logEvent(category, action, details = {}) {
+        try {
+            const event = {
+                category,
+                action,
+                timestamp: new Date().toISOString(),
+                details
+            };
+            console.debug('AudioProcessor Event:', event);
+            
+            fetch('/api/log-event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(event)
+            }).catch(err => {
+                console.error('Failed to log event:', err);
+            });
+        } catch (error) {
+            console.error('Error logging event:', error);
+        }
+    }
+
+    logError(errorType, error) {
+        try {
+            const errorDetails = {
+                type: errorType,
+                message: error.message,
+                stack: error.stack,
+                timestamp: new Date().toISOString(),
+                userAgent: navigator.userAgent,
+                audioContextState: this.audioContext?.state
+            };
+            console.error('AudioProcessor Error:', errorDetails);
+            
+            fetch('/api/log-error', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(errorDetails)
+            }).catch(err => {
+                console.error('Failed to log error:', err);
+            });
+        } catch (logError) {
+            console.error('Error logging error:', logError);
+        }
+    }
+
     getErrorTypeTitle(errorType) {
         const errorTitles = {
             'VALIDATION_ERROR': 'Validation Error',
             'FORMAT_ERROR': 'File Format Error',
-            'SIZE_ERROR': 'File Size Error',
-            'PROCESSING_ERROR': 'Processing Error',
             'UPLOAD_ERROR': 'Upload Error',
             'INIT_ERROR': 'Initialization Error',
             'UNKNOWN_ERROR': 'Error'
@@ -218,15 +314,39 @@ class AudioProcessor {
     }
 }
 
-// Enhanced initialization
+// Enhanced initialization with retry logic
 document.addEventListener('DOMContentLoaded', () => {
     console.debug('DOM loaded, initializing AudioProcessor...');
-    try {
-        if (!window.audioProcessor) {
-            window.audioProcessor = new AudioProcessor();
-            console.debug('AudioProcessor initialized successfully');
+    let retryCount = 0;
+    const maxRetries = 3;
+    
+    function initializeWithRetry() {
+        try {
+            if (!window.audioProcessor) {
+                window.audioProcessor = new AudioProcessor();
+                console.debug('AudioProcessor initialized successfully');
+            }
+        } catch (error) {
+            console.error(`Failed to initialize AudioProcessor (attempt ${retryCount + 1}):`, error);
+            
+            if (retryCount < maxRetries) {
+                retryCount++;
+                console.debug(`Retrying initialization in ${retryCount * 1000}ms...`);
+                setTimeout(initializeWithRetry, retryCount * 1000);
+            } else {
+                console.error('Max retry attempts reached. AudioProcessor initialization failed.');
+                const errorContainer = document.createElement('div');
+                errorContainer.className = 'alert alert-danger m-3';
+                errorContainer.innerHTML = `
+                    <h4 class="alert-heading">Initialization Error</h4>
+                    <p>Failed to initialize audio processing. Please refresh the page or try again later.</p>
+                    <hr>
+                    <p class="mb-0">If the problem persists, please contact support.</p>
+                `;
+                document.body.insertBefore(errorContainer, document.body.firstChild);
+            }
         }
-    } catch (error) {
-        console.error('Failed to initialize AudioProcessor:', error);
     }
+    
+    initializeWithRetry();
 });
