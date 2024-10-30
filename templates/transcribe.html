@@ -30,12 +30,12 @@
                 <form id="uploadForm" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="audioFile" class="form-label">Select Audio File</label>
-                        <input type="file" class="form-control" id="audioFile" accept=".wav,.mp3,.flac,.mp4">
+                        <input type="file" class="form-control" id="audioFile" accept=".wav,.mp3,.flac,.mp4" data-action="select-file">
                         <div class="form-text">Supported formats: WAV, MP3, FLAC, MP4</div>
                     </div>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" data-action="create-transcript">
                         <span class="spinner-border spinner-border-sm d-none me-2" role="status"></span>
-                        Start Transcription
+                        Create Transcript
                     </button>
                 </form>
             </div>
@@ -49,10 +49,10 @@
             </div>
             <div class="card-body">
                 <div class="d-grid gap-2">
-                    <button id="startStreaming" class="btn btn-success">
+                    <button id="startStreaming" class="btn btn-success" data-action="start-stream">
                         <i class="bi bi-mic-fill me-2"></i>Start Streaming
                     </button>
-                    <button id="stopStreaming" class="btn btn-danger" disabled>
+                    <button id="stopStreaming" class="btn btn-danger" disabled data-action="stop-stream">
                         <i class="bi bi-stop-fill me-2"></i>Stop Streaming
                     </button>
                 </div>
@@ -66,7 +66,7 @@
         <div class="card bg-dark border" data-component="output">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Transcription Output</h5>
-                <button class="btn btn-sm btn-outline-secondary" onclick="clearTranscription()">
+                <button class="btn btn-sm btn-outline-secondary" onclick="clearTranscription()" data-action="clear-output">
                     <i class="bi bi-trash me-1"></i>Clear
                 </button>
             </div>
@@ -82,6 +82,7 @@
 <script defer>
     // Helper function to clear transcription
     function clearTranscription() {
+        console.debug('Clearing transcription output');
         const output = document.getElementById('transcriptionOutput');
         if (output) {
             output.innerHTML = '<div class="text-muted">Transcription will appear here...</div>';
@@ -95,18 +96,27 @@
         try {
             // Initialize audio processor
             if (!window.audioProcessor) {
+                console.debug('Creating new AudioProcessor instance');
                 window.audioProcessor = new AudioProcessor();
             }
             
             // Initialize stream handler
             if (!window.streamHandler) {
+                console.debug('Creating new StreamHandler instance');
                 window.streamHandler = new StreamHandler();
             }
+
+            console.debug('Components initialized successfully');
         } catch (error) {
             console.error('Component initialization failed:', error);
             AppErrors.logError('component', {
                 message: 'Failed to initialize transcription components',
-                error: error
+                error: error,
+                stack: error.stack,
+                context: {
+                    userAgent: navigator.userAgent,
+                    timestamp: new Date().toISOString()
+                }
             });
         }
     });

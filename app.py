@@ -2,14 +2,54 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 from flask_cors import CORS
 import os
 import logging
+import shutil
+from datetime import datetime
+from logging.handlers import RotatingFileHandler
 from monitoring import setup_logging, start_monitoring, log_request_metrics
 from error_handling.exceptions import TranscriptionError, ValidationError, APIError
 from error_handling.handlers import handle_errors, error_context, retry_on_error, log_errors
 from database import db
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-# Set up enhanced logging
-logger, perf_logger = setup_logging()
+# Clean up old log files
+def cleanup_logs():
+    log_files = ['app.log', 'error.log', 'performance.log']
+    for log_file in log_files:
+        try:
+            if os.path.exists(log_file):
+                os.remove(log_file)
+                print(f"Removed old log file: {log_file}")
+        except Exception as e:
+            print(f"Error cleaning up log file {log_file}: {str(e)}")
+
+# Clean up logs before starting
+cleanup_logs()
+
+# Set up enhanced logging with more detailed formatting
+log_formatter = logging.Formatter(
+    '%(asctime)s - [%(levelname)s] - %(name)s - %(module)s:%(lineno)d - %(message)s'
+)
+
+# Configure app logger
+app_handler = RotatingFileHandler('app.log', maxBytes=10*1024*1024, backupCount=5)
+app_handler.setFormatter(log_formatter)
+app_handler.setLevel(logging.DEBUG)
+
+# Configure error logger
+error_handler = RotatingFileHandler('error.log', maxBytes=10*1024*1024, backupCount=5)
+error_handler.setFormatter(log_formatter)
+error_handler.setLevel(logging.ERROR)
+
+# Set up root logger
+root_logger = logging.getLogger()
+root_logger.setLevel(logging.DEBUG)
+for handler in root_logger.handlers[:]:
+    root_logger.removeHandler(handler)
+root_logger.addHandler(app_handler)
+root_logger.addHandler(error_handler)
+
+# Get application logger
+logger = logging.getLogger(__name__)
 
 # Initialize the app with proper static file configuration
 app = Flask(__name__, 
@@ -47,13 +87,26 @@ app.config.update(
 CORS(app)
 db.init_app(app)
 
-# Create upload folder
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-logger.info(f"Upload folder created at {app.config['UPLOAD_FOLDER']}")
+# Create upload folder with proper permissions
+uploads_dir = app.config['UPLOAD_FOLDER']
+if os.path.exists(uploads_dir):
+    shutil.rmtree(uploads_dir)
+os.makedirs(uploads_dir, exist_ok=True)
+os.chmod(uploads_dir, 0o755)
+logger.info(f"Upload folder created at {uploads_dir} with permissions 755")
 
 # Security headers
 @app.after_request
 def add_header(response):
+    request_info = {
+        'endpoint': request.endpoint,
+        'method': request.method,
+        'path': request.path,
+        'remote_addr': request.remote_addr,
+        'user_agent': request.headers.get('User-Agent')
+    }
+    logger.debug(f"Processing request: {request_info}")
+    
     # Add security headers
     response.headers.update({
         'Access-Control-Allow-Origin': '*',
@@ -82,16 +135,27 @@ def add_header(response):
         response.cache_control.public = True
         response.headers['Vary'] = 'Accept-Encoding'
     
+    logger.debug(f"Response headers set: {dict(response.headers)}")
     return response
 
 # Serve static files directly
 @app.route('/static/<path:filename>')
 def serve_static(filename):
+    logger.debug(f"Serving static file: {filename}")
     return send_from_directory(app.static_folder, filename)
 
 # Error handlers
 @app.errorhandler(404)
 def not_found_error(error):
+    error_context = {
+        'url': request.url,
+        'method': request.method,
+        'remote_addr': request.remote_addr,
+        'user_agent': request.headers.get('User-Agent'),
+        'error': str(error)
+    }
+    logger.error(f"404 Error: {error_context}")
+    
     if request.path.startswith('/api/'):
         return jsonify({'error': 'Resource not found', 'code': 404}), 404
     return render_template('404.html'), 404
@@ -101,8 +165,10 @@ def internal_error(error):
     error_context = {
         'url': request.url,
         'method': request.method,
+        'remote_addr': request.remote_addr,
+        'user_agent': request.headers.get('User-Agent'),
         'error': str(error),
-        'stack_trace': getattr(error, '__traceback__', None)
+        'stack_trace': ''.join(traceback.format_exc())
     }
     logger.error(f"Internal server error: {error_context}")
     
