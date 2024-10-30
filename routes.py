@@ -3,6 +3,14 @@ from app import app, logger
 from error_handling.exceptions import TranscriptionError
 import traceback
 from datetime import datetime
+from transcription.deepgram_streaming import DeepgramStreamingClient
+from flask_sock import Sock
+
+# Initialize Flask-Sock for WebSocket support
+sock = Sock(app)
+
+# Initialize Deepgram streaming client
+streaming_client = DeepgramStreamingClient()
 
 @app.route('/')
 def index():
@@ -15,6 +23,19 @@ def vocabulary():
     """Custom vocabulary page route handler"""
     logger.info("Serving vocabulary page")
     return render_template('vocabulary.html')
+
+@sock.route('/stream')
+async def stream(ws):
+    """WebSocket endpoint for real-time transcription"""
+    logger.info("New streaming connection initiated")
+    try:
+        await streaming_client.handle_websocket(ws)
+    except Exception as e:
+        logger.error(f"Streaming error: {str(e)}\n{traceback.format_exc()}")
+        try:
+            await ws.send(str(e))
+        except:
+            pass
 
 @app.route('/api/log-error', methods=['POST'])
 def log_frontend_error():

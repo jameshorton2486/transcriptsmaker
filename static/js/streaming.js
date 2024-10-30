@@ -39,6 +39,7 @@ class StreamHandler {
     async startStreaming() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            await this.setupWebSocket();
             this.setupMediaRecorder(stream);
             this.startButton.disabled = true;
             this.stopButton.disabled = false;
@@ -47,51 +48,132 @@ class StreamHandler {
         }
     }
 
+    async setupWebSocket() {
+        try {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsUrl = `${protocol}//${window.location.host}/stream`;
+            this.ws = new WebSocket(wsUrl);
+            
+            this.ws.onopen = () => {
+                console.debug('WebSocket connection established');
+                this.startPingInterval();
+            };
+
+            this.ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'transcript' && data.transcript) {
+                        this.updateTranscription(data);
+                    } else if (data.type === 'error') {
+                        this.showError(data.error, 'TRANSCRIPTION_ERROR');
+                    }
+                } catch (error) {
+                    console.error('Error processing WebSocket message:', error);
+                }
+            };
+
+            this.ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                this.handleWebSocketError();
+            };
+
+            this.ws.onclose = () => {
+                console.debug('WebSocket connection closed');
+                this.cleanupWebSocket();
+            };
+
+        } catch (error) {
+            throw new Error(`Failed to setup WebSocket: ${error.message}`);
+        }
+    }
+
     setupMediaRecorder(stream) {
-        this.mediaRecorder = new MediaRecorder(stream);
-        this.mediaRecorder.addEventListener('dataavailable', (event) => {
-            this.audioChunks.push(event.data);
-        });
+        const audioContext = new AudioContext({ sampleRate: 16000 });
+        const source = audioContext.createMediaStreamSource(stream);
+        const processor = audioContext.createScriptProcessor(4096, 1, 1);
 
-        this.mediaRecorder.addEventListener('stop', () => {
-            const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
-            this.uploadAudio(audioBlob);
-            this.audioChunks = [];
-        });
+        source.connect(processor);
+        processor.connect(audioContext.destination);
 
-        this.mediaRecorder.start(1000);
+        processor.onaudioprocess = (e) => {
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                const inputData = e.inputBuffer.getChannelData(0);
+                const audioData = new Float32Array(inputData);
+                this.ws.send(audioData.buffer);
+            }
+        };
+
+        this.mediaRecorder = {
+            stream,
+            audioContext,
+            source,
+            processor,
+            stop: () => {
+                processor.disconnect();
+                source.disconnect();
+                audioContext.close();
+                stream.getTracks().forEach(track => track.stop());
+            }
+        };
+
         this.isRecording = true;
     }
 
     stopStreaming() {
-        if (this.mediaRecorder && this.isRecording) {
-            this.mediaRecorder.stop();
+        if (this.isRecording) {
+            this.cleanupWebSocket();
+            if (this.mediaRecorder) {
+                this.mediaRecorder.stop();
+                this.mediaRecorder = null;
+            }
             this.isRecording = false;
             this.startButton.disabled = false;
             this.stopButton.disabled = true;
         }
     }
 
-    async uploadAudio(blob) {
-        try {
-            const formData = new FormData();
-            formData.append('audio', blob, 'recording.wav');
-
-            const response = await fetch('/api/transcribe', {
-                method: 'POST',
-                body: formData
-            });
-
-            const result = await response.json();
-            if (!response.ok) {
-                throw new Error(result.error || 'Failed to upload recording');
-            }
-
-            document.getElementById('transcriptionOutput').innerHTML = 
-                `<div class="alert alert-success">Recording uploaded successfully. Transcription ID: ${result.id}</div>`;
-        } catch (error) {
-            this.showError(error.message, 'UPLOAD_ERROR');
+    updateTranscription(data) {
+        const output = document.getElementById('transcriptionOutput');
+        if (output) {
+            const transcriptDiv = document.createElement('div');
+            transcriptDiv.className = 'mb-2';
+            transcriptDiv.innerHTML = `
+                <p class="mb-1">${this.sanitizeErrorMessage(data.transcript)}</p>
+                <small class="text-muted">Confidence: ${(data.confidence * 100).toFixed(1)}%</small>
+            `;
+            output.appendChild(transcriptDiv);
+            output.scrollTop = output.scrollHeight;
         }
+    }
+
+    startPingInterval() {
+        this.pingInterval = setInterval(() => {
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(new ArrayBuffer(0));
+            }
+        }, 30000);
+    }
+
+    handleWebSocketError() {
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+            this.reconnectAttempts++;
+            setTimeout(() => this.setupWebSocket(), this.reconnectDelay * this.reconnectAttempts);
+        } else {
+            this.showError('Connection lost', 'CONNECTION_ERROR', 'Unable to reconnect to the server');
+            this.stopStreaming();
+        }
+    }
+
+    cleanupWebSocket() {
+        if (this.pingInterval) {
+            clearInterval(this.pingInterval);
+            this.pingInterval = null;
+        }
+        if (this.ws) {
+            this.ws.close();
+            this.ws = null;
+        }
+        this.reconnectAttempts = 0;
     }
 
     initializeModal() {
@@ -230,7 +312,6 @@ class StreamHandler {
     }
 }
 
-// Enhanced initialization
 document.addEventListener('DOMContentLoaded', () => {
     console.debug('DOM loaded, initializing StreamHandler...');
     try {

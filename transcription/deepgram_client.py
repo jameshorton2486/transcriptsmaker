@@ -4,12 +4,7 @@ import asyncio
 import mimetypes
 from typing import Optional, Dict, Any, List
 from datetime import datetime
-from deepgram import (
-    DeepgramClient,
-    DeepgramClientOptions,
-    PrerecordedOptions,
-    FileSource
-)
+from deepgram import DeepgramClient, PrerecordedOptions
 from tenacity import (
     retry,
     stop_after_attempt,
@@ -62,10 +57,7 @@ class DeepgramTranscriptionClient:
         if not self.api_key:
             raise DeepgramError("Deepgram API key not found in environment variables")
             
-        self.client = DeepgramClient(
-            api_key=self.api_key,
-            options=DeepgramClientOptions(timeout=30)
-        )
+        self.client = DeepgramClient(self.api_key)
         logger.info("Deepgram client initialized")
 
     def _validate_file(self, file_path: str) -> None:
@@ -143,47 +135,51 @@ class DeepgramTranscriptionClient:
                 diarize=True,
                 utterances=True,
                 model="nova-2",
-                language="en"
+                language="en-US"
             )
 
             logger.info(f"Starting transcription for file: {file_path}")
+            
+            # Determine file mimetype
+            mime_type, _ = mimetypes.guess_type(file_path)
+            if not mime_type:
+                mime_type = 'audio/wav'  # Default to wav if unable to determine
+
             with open(file_path, 'rb') as audio:
-                source = FileSource(audio)
-                response = await self.client.transcription.prerecorded(
-                    source,
-                    options
-                )
+                response = await self.client.listen.prerecorded.v("1").transcribe_file(audio, options)
 
             # Process response
-            if not response or not response.results:
-                raise DeepgramError("No transcription results received")
+            if not response or not isinstance(response, dict) or 'results' not in response:
+                raise DeepgramError("Invalid response format from Deepgram")
 
-            # Extract transcription from first channel
-            channels = response.results.channels
-            if not channels:
-                raise DeepgramError("No channels found in transcription")
+            try:
+                results = response['results']
+                if not results.get('channels'):
+                    raise DeepgramError("No channels found in transcription results")
 
-            alternatives = channels[0].alternatives
-            if not alternatives:
-                raise DeepgramError("No alternatives found in transcription")
+                channel = results['channels'][0]
+                if not channel.get('alternatives'):
+                    raise DeepgramError("No alternatives found in transcription results")
 
-            transcript = alternatives[0]
+                transcript = channel['alternatives'][0]
+            except (KeyError, IndexError) as e:
+                raise DeepgramError(f"Invalid response structure: {str(e)}")
 
             # Log success metrics
             duration = time.time() - start_time
             metrics.update({
                 'duration': duration,
                 'success': True,
-                'transcript_length': len(transcript.transcript),
-                'confidence': transcript.confidence
+                'transcript_length': len(transcript.get('transcript', '')),
+                'confidence': transcript.get('confidence', 0)
             })
             logger.info(f"Transcription metrics: {metrics}")
 
             return {
-                'text': transcript.transcript,
-                'confidence': transcript.confidence,
-                'words': transcript.words,
-                'speakers': self._extract_speakers(channels[0])
+                'text': transcript.get('transcript', ''),
+                'confidence': transcript.get('confidence', 0),
+                'words': transcript.get('words', []),
+                'speakers': self._extract_speakers(channel)
             }
 
         except Exception as e:
@@ -210,36 +206,39 @@ class DeepgramTranscriptionClient:
             except Exception as e:
                 logger.error(f"Error cleaning up file {file_path}: {str(e)}")
 
-    def _extract_speakers(self, channel: Any) -> List[Dict[str, Any]]:
+    def _extract_speakers(self, channel_data: Dict) -> List[Dict[str, Any]]:
         """Extract speaker information from channel data"""
         speakers = []
-        words = getattr(channel, 'words', [])
-        
+        alternatives = channel_data.get('alternatives', [])
+        if not alternatives:
+            return speakers
+
+        words = alternatives[0].get('words', [])
         current_speaker = None
         start_time = None
         current_text = []
 
         for word in words:
-            speaker = getattr(word, 'speaker', None)
+            speaker = word.get('speaker')
             if speaker != current_speaker:
                 if current_speaker is not None:
                     speakers.append({
                         'speaker_id': str(current_speaker),
                         'start_time': start_time,
-                        'end_time': getattr(word, 'start', 0),
+                        'end_time': word.get('start', 0),
                         'text': ' '.join(current_text)
                     })
                 current_speaker = speaker
-                start_time = getattr(word, 'start', 0)
+                start_time = word.get('start', 0)
                 current_text = []
-            current_text.append(getattr(word, 'word', ''))
+            current_text.append(word.get('word', ''))
 
         # Add the last speaker segment
         if current_speaker is not None and current_text:
             speakers.append({
                 'speaker_id': str(current_speaker),
                 'start_time': start_time,
-                'end_time': getattr(words[-1], 'end', 0) if words else 0,
+                'end_time': words[-1].get('end', 0) if words else 0,
                 'text': ' '.join(current_text)
             })
 

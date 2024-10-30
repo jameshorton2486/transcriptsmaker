@@ -12,7 +12,7 @@ dependencies = [
     "aiohttp>=3.10.10",
     "websockets>=13.1",
     "python-dotenv>=1.0.1",
-    "deepgram-sdk==2.12.0",
+    "deepgram-sdk>=2.11.0",
     "noisereduce",
     "numpy>=1.20.0,<1.24.0",
     "scipy>=1.7.0,<1.10.0",
@@ -30,4 +30,6 @@ dependencies = [
     "asgiref>=3.8.1",
     "aioflask>=0.4.0",
     "flask-cors>=5.0.0",
+    "flask-sock>=0.7.0",
+    "tenacity",
 ]
