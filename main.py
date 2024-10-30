@@ -5,6 +5,7 @@ from app import app, logger
 import atexit
 import signal
 import shutil
+import traceback
 
 # Version info
 VERSION = "1.0.0"
@@ -21,18 +22,21 @@ def cleanup(signum=None, frame=None):
                 try:
                     if os.path.islink(file_path):
                         os.unlink(file_path)
+                        logger.debug(f"Removed symlink: {file_path}")
                     elif os.path.isfile(file_path):
                         os.remove(file_path)
+                        logger.debug(f"Removed file: {file_path}")
                 except Exception as e:
-                    logger.error(f"Error cleaning up {file_path}: {str(e)}")
+                    logger.error(f"Error cleaning up {file_path}: {str(e)}\n{traceback.format_exc()}")
             
             # Clean directory itself
             try:
                 shutil.rmtree(tmp_dir)
+                logger.info("Removed upload directory")
             except Exception as e:
-                logger.error(f"Error removing upload directory: {str(e)}")
+                logger.error(f"Error removing upload directory: {str(e)}\n{traceback.format_exc()}")
     except Exception as e:
-        logger.error(f"Error during cleanup: {str(e)}")
+        logger.error(f"Error during cleanup: {str(e)}\n{traceback.format_exc()}")
     finally:
         # Ensure we exit
         if signum is not None:
@@ -50,8 +54,8 @@ if __name__ == "__main__":
         signal.signal(signal.SIGINT, cleanup)
         atexit.register(cleanup)
 
-        # Get port from environment or use default
-        port = int(os.environ.get('PORT', 5000))
+        # Get port from environment with Replit compatibility
+        port = int(os.environ.get('PORT', '5000'))
         
         # Create uploads directory with proper permissions
         uploads_dir = '/tmp/uploads'
@@ -62,6 +66,7 @@ if __name__ == "__main__":
         # Set proper permissions for uploads directory
         try:
             os.chmod(uploads_dir, 0o755)
+            logger.info(f"Set permissions 755 for uploads directory: {uploads_dir}")
         except Exception as e:
             logger.warning(f"Could not set permissions for uploads directory: {str(e)}")
         
@@ -69,6 +74,7 @@ if __name__ == "__main__":
         static_dir = os.path.join(os.path.dirname(__file__), 'static')
         if not os.path.exists(static_dir):
             os.makedirs(static_dir, exist_ok=True)
+            logger.info(f"Created static directory: {static_dir}")
         
         # Log configuration
         config_info = {
@@ -91,5 +97,5 @@ if __name__ == "__main__":
             threaded=True
         )
     except Exception as e:
-        logger.error(f"Failed to start server: {str(e)}")
+        logger.error(f"Failed to start server: {str(e)}\n{traceback.format_exc()}")
         sys.exit(1)

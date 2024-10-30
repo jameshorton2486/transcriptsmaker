@@ -1,154 +1,119 @@
-from deepgram import Deepgram
 import os
-import asyncio
-import json
-from models import Transcription, Speaker, NoiseProfile
-from app import db
 import logging
-from error_handling.exceptions import TranscriptionError, APIError
+import aiohttp
+import json
+from typing import Optional, Dict, Any
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-class DeepgramAPIError(TranscriptionError):
-    """Custom exception for Deepgram API related errors"""
-    def __init__(self, message: str, error_code: str = None):
-        super().__init__(message, error_code or 'DEEPGRAM_API_ERROR')
+class DeepgramError(Exception):
+    def __init__(self, message: str, status_code: Optional[int] = None, response_data: Optional[Dict] = None):
+        super().__init__(message)
+        self.status_code = status_code
+        self.response_data = response_data
+        self.timestamp = datetime.utcnow()
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            'message': str(self),
+            'status_code': self.status_code,
+            'timestamp': self.timestamp.isoformat(),
+            'response_data': self.response_data
+        }
 
 class DeepgramTranscriptionClient:
-    def __init__(self):
-        self.api_key = os.environ.get("DEEPGRAM_API_KEY")
-        if not self.api_key:
-            raise DeepgramAPIError("Deepgram API key not found in environment", "MISSING_API_KEY")
-        
-        try:
-            self.dg_client = Deepgram(self.api_key)
-        except Exception as e:
-            raise DeepgramAPIError(f"Failed to initialize Deepgram client: {str(e)}", "INIT_ERROR")
+    BASE_URL = "https://api.deepgram.com/v1"
     
-    async def validate_api_key(self):
-        """Validate the Deepgram API key by making a test request"""
-        try:
-            # Create a minimal audio sample for testing
-            test_audio = b'\x00' * 44100  # 1 second of silence
-            source = {'buffer': test_audio, 'mimetype': 'audio/wav'}
-            await self.dg_client.transcription.prerecorded(source, {'smart_format': True})
-            logger.info("Deepgram API key validation successful")
-            return True
-        except Exception as e:
-            error_msg = str(e).lower()
-            if 'unauthorized' in error_msg or 'invalid api key' in error_msg:
-                raise DeepgramAPIError("Invalid Deepgram API key", "INVALID_API_KEY")
-            elif 'network' in error_msg or 'connection' in error_msg:
-                raise DeepgramAPIError("Network error while validating API key", "NETWORK_ERROR")
-            else:
-                raise DeepgramAPIError(f"Error validating API key: {str(e)}", "VALIDATION_ERROR")
+    def __init__(self):
+        self.api_key = os.environ.get('DEEPGRAM_API_KEY')
+        if not self.api_key:
+            raise DeepgramError("Deepgram API key not found in environment variables")
             
-    async def transcribe_file(self, audio_file_path):
-        """Transcribe audio file with speaker diarization and noise classification"""
-        try:
-            with open(audio_file_path, 'rb') as audio:
-                source = {'buffer': audio, 'mimetype': 'audio/wav'}
-                options = {
-                    'smart_format': True,
-                    'diarize': True,
-                    'utterances': True,
-                    'punctuate': True,
-                    'noise_reduction': True,
-                    'detect_topics': True,
-                    'language': 'en-US'
-                }
-                
-                try:
-                    response = await self.dg_client.transcription.prerecorded(source, options)
-                    return self._process_response(response)
-                except Exception as e:
-                    error_msg = str(e).lower()
-                    if 'unauthorized' in error_msg:
-                        raise DeepgramAPIError("Invalid API key or unauthorized access", "AUTH_ERROR")
-                    elif 'format' in error_msg:
-                        raise DeepgramAPIError("Invalid audio format or corrupted file", "FORMAT_ERROR")
-                    elif 'network' in error_msg or 'connection' in error_msg:
-                        raise DeepgramAPIError("Network error during transcription", "NETWORK_ERROR")
-                    else:
-                        raise DeepgramAPIError(f"Transcription error: {str(e)}", "PROCESSING_ERROR")
-                        
-        except FileNotFoundError:
-            raise DeepgramAPIError(f"Audio file not found: {audio_file_path}", "FILE_NOT_FOUND")
-        except Exception as e:
-            if not isinstance(e, DeepgramAPIError):
-                raise DeepgramAPIError(f"Error processing audio file: {str(e)}", "PROCESSING_ERROR")
-            raise
-            
-    def _process_response(self, response):
-        """Process Deepgram response and extract relevant information"""
-        try:
-            results = response['results']
-            transcript_data = {
-                'text': results['channels'][0]['alternatives'][0]['transcript'],
-                'confidence': results['channels'][0]['alternatives'][0]['confidence'],
-                'words': results['channels'][0]['alternatives'][0]['words'],
-                'speakers': []
-            }
-            
-            # Process speaker diarization
-            current_speaker = None
-            current_text = []
-            
-            for word in transcript_data['words']:
-                if 'speaker' in word:
-                    if current_speaker != word['speaker']:
-                        if current_speaker is not None:
-                            transcript_data['speakers'].append({
-                                'speaker_id': f"speaker_{current_speaker}",
-                                'text': ' '.join(current_text),
-                                'start_time': start_time,
-                                'end_time': word['end']
-                            })
-                        current_speaker = word['speaker']
-                        current_text = [word['word']]
-                        start_time = word['start']
-                    else:
-                        current_text.append(word['word'])
-                        
-            # Add the last speaker segment
-            if current_speaker is not None and current_text:
-                transcript_data['speakers'].append({
-                    'speaker_id': f"speaker_{current_speaker}",
-                    'text': ' '.join(current_text),
-                    'start_time': start_time,
-                    'end_time': transcript_data['words'][-1]['end']
-                })
-                
-            return transcript_data
-            
-        except KeyError as e:
-            raise DeepgramAPIError(f"Invalid response format: {str(e)}", "RESPONSE_ERROR")
-        except Exception as e:
-            raise DeepgramAPIError(f"Error processing response: {str(e)}", "PROCESSING_ERROR")
+        self.headers = {
+            'Authorization': f'Token {self.api_key}',
+            'Content-Type': 'application/json'
+        }
+        logger.info("Deepgram client initialized")
+
+    def _validate_response(self, status_code: int, response_data: Dict) -> None:
+        """Validate API response and raise appropriate errors"""
+        if status_code == 404:
+            logger.error(f"Deepgram API endpoint not found: {response_data}")
+            raise DeepgramError("API endpoint not found", status_code, response_data)
+        elif status_code == 401:
+            logger.error("Invalid Deepgram API key")
+            raise DeepgramError("Invalid API key", status_code, response_data)
+        elif status_code == 429:
+            logger.error("Rate limit exceeded")
+            raise DeepgramError("Rate limit exceeded", status_code, response_data)
+        elif status_code >= 400:
+            logger.error(f"Deepgram API error: {response_data}")
+            raise DeepgramError(f"API error: {response_data.get('error', 'Unknown error')}", 
+                              status_code, response_data)
+
+    async def transcribe_file(self, file_path: str) -> Dict[str, Any]:
+        """Transcribe an audio file using Deepgram's API"""
+        if not os.path.exists(file_path):
+            logger.error(f"File not found: {file_path}")
+            raise DeepgramError(f"File not found: {file_path}")
+
+        endpoint = f"{self.BASE_URL}/listen"
         
-    async def start_streaming(self, websocket):
-        """Handle real-time streaming transcription"""
         try:
-            options = {
-                'punctuate': True,
-                'diarize': True,
-                'smart_format': True,
-                'language': 'en-US'
-            }
-            
-            try:
-                stream = await self.dg_client.transcription.live(options)
-                return stream
-            except Exception as e:
-                error_msg = str(e).lower()
-                if 'unauthorized' in error_msg:
-                    raise DeepgramAPIError("Invalid API key for streaming", "STREAM_AUTH_ERROR")
-                elif 'network' in error_msg or 'connection' in error_msg:
-                    raise DeepgramAPIError("Network error starting stream", "STREAM_NETWORK_ERROR")
-                else:
-                    raise DeepgramAPIError(f"Error starting live transcription: {str(e)}", "STREAM_ERROR")
+            logger.info(f"Starting transcription for file: {file_path}")
+            async with aiohttp.ClientSession() as session:
+                # Log request details (excluding sensitive info)
+                logger.debug(f"Sending request to: {endpoint}")
+                logger.debug(f"Request headers: {json.dumps({k: v for k, v in self.headers.items() if k != 'Authorization'})}")
+
+                form_data = aiohttp.FormData()
+                form_data.add_field('file', 
+                                  open(file_path, 'rb'),
+                                  filename=os.path.basename(file_path))
+
+                async with session.post(endpoint, 
+                                     data=form_data,
+                                     headers={'Authorization': self.headers['Authorization']}) as response:
                     
+                    # Log response status
+                    logger.debug(f"Response status: {response.status}")
+                    response_data = await response.json()
+
+                    # Validate response
+                    self._validate_response(response.status, response_data)
+
+                    if response.status == 200:
+                        # Process successful response
+                        results = response_data.get('results', {})
+                        channels = results.get('channels', [])
+                        
+                        if not channels:
+                            logger.warning("No transcription results found in response")
+                            return {'error': 'No transcription results found'}
+
+                        # Extract transcription from first channel
+                        alternatives = channels[0].get('alternatives', [])
+                        if not alternatives:
+                            logger.warning("No alternatives found in transcription")
+                            return {'error': 'No transcription alternatives found'}
+
+                        transcript = alternatives[0]
+                        
+                        logger.info(f"Transcription completed successfully for {file_path}")
+                        return {
+                            'text': transcript.get('transcript', ''),
+                            'confidence': transcript.get('confidence', 0.0),
+                            'words': transcript.get('words', [])
+                        }
+
+                    logger.error(f"Unexpected response: {response_data}")
+                    raise DeepgramError("Unexpected API response", 
+                                      response.status, response_data)
+
+        except aiohttp.ClientError as e:
+            logger.error(f"Network error during transcription: {str(e)}")
+            raise DeepgramError(f"Network error: {str(e)}")
         except Exception as e:
-            if not isinstance(e, DeepgramAPIError):
-                raise DeepgramAPIError(f"Error initializing stream: {str(e)}", "STREAM_INIT_ERROR")
-            raise
+            logger.error(f"Error during transcription: {str(e)}")
+            raise DeepgramError(f"Transcription error: {str(e)}")
