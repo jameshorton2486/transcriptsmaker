@@ -1,0 +1,112 @@
+To add real-time transcription using Deepgram's streaming API to your transcriptsmaker application, you'll need to implement the following components:
+Establish a WebSocket connection to Deepgram's API
+Capture and stream audio data from the client
+Process the transcription results in real-time
+Here's how you can implement this functionality:
+1. Set up Deepgram connection
+First, create a new file in your project, for example deepgram_transcriber.py, and add the following code:
+python
+import asyncio
+import os
+from deepgram import Deepgram
+
+DEEPGRAM_API_KEY = os.getenv('DEEPGRAM_API_KEY')
+
+async def transcribe_stream(stream):
+    dg_client = Deepgram(DEEPGRAM_API_KEY)
+    
+    async def process_audio(data):
+        if len(data) == 0:
+            return
+
+        try:
+            response = await dg_client.transcription.live({'buffer': data, 'mimetype': 'audio/raw'})
+            transcript = response['channel']['alternatives'][0]['transcript']
+            if transcript:
+                print(f"Transcription: {transcript}")
+                # Here you can send the transcript to the client or process it further
+        except Exception as e:
+            print(f"Error during transcription: {str(e)}")
+
+    await stream(process_audio)
+
+2. Implement WebSocket endpoint
+In your routes.py file, add a new WebSocket endpoint:
+python
+from fastapi import WebSocket
+from .deepgram_transcriber import transcribe_stream
+
+@app.websocket("/ws/transcribe")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    
+    async def stream(callback):
+        while True:
+            data = await websocket.receive_bytes()
+            await callback(data)
+
+    await transcribe_stream(stream)
+
+3. Update frontend
+In your templates/index.html file, add JavaScript to handle audio capture and streaming:
+xml
+<script>
+let socket;
+
+async function startTranscription() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const audioContext = new AudioContext();
+    const source = audioContext.createMediaStreamSource(stream);
+    const processor = audioContext.createScriptProcessor(1024, 1, 1);
+
+    source.connect(processor);
+    processor.connect(audioContext.destination);
+
+    socket = new WebSocket('ws://localhost:8000/ws/transcribe');
+
+    socket.onopen = () => {
+        console.log('WebSocket connection established');
+    };
+
+    socket.onmessage = (event) => {
+        console.log('Received:', event.data);
+        // Update UI with transcription result
+    };
+
+    processor.onaudioprocess = (e) => {
+        if (socket.readyState === WebSocket.OPEN) {
+            const inputData = e.inputBuffer.getChannelData(0);
+            const uint8Array = new Uint8Array(inputData.buffer);
+            socket.send(uint8Array);
+        }
+    };
+}
+
+function stopTranscription() {
+    if (socket) {
+        socket.close();
+    }
+}
+</script>
+
+<button onclick="startTranscription()">Start Transcription</button>
+<button onclick="stopTranscription()">Stop Transcription</button>
+
+4. Update requirements
+Make sure to add the Deepgram SDK to your pyproject.toml or requirements.txt:
+text
+deepgram-sdk
+
+5. Environment variables
+Add the Deepgram API key to your .env file:
+text
+DEEPGRAM_API_KEY=your_api_key_here
+
+These changes will add real-time transcription capabilities to your application using Deepgram's streaming API. The frontend captures audio from the user's microphone and sends it to the backend via WebSocket. The backend then streams this audio to Deepgram and receives transcription results in real-time.
+To improve this implementation, consider:
+Adding error handling and reconnection logic for WebSocket connections.
+Implementing a way to display the transcription results on the frontend in real-time.
+Adding user authentication to secure the WebSocket endpoint.
+Optimizing audio processing parameters for better performance.
+Implementing a way to save transcriptions to your database using the models you've defined in models.py.
+Remember to test thoroughly and handle potential errors gracefully. Also, ensure that you're complying with data privacy r
